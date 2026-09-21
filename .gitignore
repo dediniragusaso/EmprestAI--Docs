@@ -1,0 +1,20 @@
+# Segredos locais - NUNCA commitar
+.env
+.env.local
+.env.*.local
+
+# Repos filhos versionados separadamente
+# (back = API, GitHub EmprestAI--Back; front tera repo proprio)
+back/
+
+# Dependencias e build
+node_modules/
+dist/
+build/
+coverage/
+
+# Logs e lixo de SO/editor
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
