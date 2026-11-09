@@ -6,7 +6,7 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 |---|---|---|---|---|---|
 | Verificador corrige teste (tech lead) | requisito de independência; rules/spec-flow.md | Recusado | O verificador não corrige; quem corrige é o agente principal | .claude/agents/verificador-spec.md | fc42860 |
 | Agente cria usuário no Auth remoto (permitido em rules/restrictions.md) | Enunciado: o agente nunca escreve em produção | Permissão removida; "produção" definida como banco, Storage e Auth do deploy | A escrita em produção é do operador | rules/restrictions.md | c45aa18 |
-| Pexels trocado por Pixabay (orientação do professor) | Enunciado: "só a API do Pexels" | Seguida a orientação | Pixabay exigido pelo professor; evidência da orientação: [anexar print] | skill imagens-equipamentos | pendente |
+| Pexels trocado por Pixabay (orientação do professor) | Enunciado: "só a API do Pexels" | Seguida a orientação | Pixabay exigido pelo professor; evidência da orientação: [anexar print] | skill imagens-equipamentos; docs/evidencias/orientacao-pixabay.md | 6ace99b (skill, raiz); 769cc9c (evidência) |
 | Limite 5, 14 dias úteis, sharp, senha no arquivo, crédito do catálogo, TI-0010 | PRD, ADR-003, rules, enunciado | Decididos, a registrar nas specs 002 e 003 | Ver specs | pendente | pendente |
 
 ## Seção 2 · Onde o agente tentou decidir
@@ -16,7 +16,13 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 
 ## Seção 3 · Candidata a ADR
 - Mecanismo para tornar o verificador obrigatório: hook do harness, git hook ou CI (alternativas e limitações levantadas pelo agente). Decidir se virou ADR.
-- ADR da biblioteca de imagem (Pixabay não entrega 800x600): ADR a escrever.
+- ADR da biblioteca de imagem (Pixabay não entrega 800x600): escrito pelo time, docs/adr/004-biblioteca-de-imagem.md | commit 3593277
+
+## Seção 4 · Imagens dos equipamentos (revisão humana e entrega)
+- Revisão humana até agora: 9 fotos reprovadas, 1 aprovada (TI-0010), 2 pendentes na primeira leva. Motivos (uma foto pode ter mais de um): fora de tema 4, logo legível 4, pessoa 2, texto legível 1, tela com conteúdo 1 | back/scripts/imagens-equipamentos/revisao.json | commit 75d8e5a (repo back)
+- Após a troca pela pré-triagem do agente: 5 fotos preparadas em 800x600 (1 aprovada, 4 pendentes) e 7 equipamentos sem foto, porque nenhuma das 5 melhores candidatas da busca original passou (marca ou logo legível, pessoa, tela com conteúdo, fora de tema) | docs/handoffs/2026-11-09-imagens-equipamentos-parcial.md | commit 96cdc70
+- Commits da etapa, repo back: sharp 0.35.5 `8e99c4a` · scripts `a883bf4` · nomes no .env.example `05459f6` · revisao.json `75d8e5a` · opções --escolher e --pular `7c6652d`
+- Commits da etapa, raiz: skill `6ace99b` · rules/secrets.md `afc3890` · SKILL.md com as opções `04f6d7a` · handoff `96cdc70`
 
 ## Seção 5 · Verificador
 - Gatilho: hook PreToolUse (.claude/settings.json) | commits 8169e71, 3f39782
@@ -36,4 +42,5 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 ## Seção 8 · Ficou de fora
 - 001-login em aberto como dívida | commit 4f9a30b
 - Front sem runner de teste; ADR 002 inexistente
+- Imagens: revisão final das fotos e teste do `enviar` no Supabase local pendentes (Docker parado, Supabase CLI ausente); 7 equipamentos sem foto aceitável | commit 96cdc70
 - Limitações do hook (evidência forjável; só vale no harness; trabalho não commitado não é conferido)
