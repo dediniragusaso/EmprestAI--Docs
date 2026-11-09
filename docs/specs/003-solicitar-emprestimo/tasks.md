@@ -48,8 +48,8 @@ então o `migrate reset` não se aplica. Nenhuma tarefa escreve em produção ne
   botão "Devolver"). (CA-21) — front. Evidência: `1436d72` (front); `npm run build` ok; buscas do CA-22 e do CA-26 sem ocorrência. Os prints (CA-21) dependem da T16.
 - [ ] T16 Evidências manuais no ambiente local (Supabase local, back e front em dev, empréstimos
   semeados por SQL no banco local): prints em `docs/evidencias/003-<ca>-<descrição>.png` com data e
-  ambiente, e um índice em `docs/evidencias/003-indice.md`. (CA-02, CA-04, CA-19, CA-20, CA-21,
-  CA-22, CA-23) — raiz. Evidência: PARCIAL, **os prints são do operador** (o agente não tem navegador e não instala Playwright). Preparado: `cbc2b66` (`cenarios-locais.sql`, validado em Postgres descartável: limite, atraso, um, limpar, e a guarda de porta) e `732f81b` (`docs/evidencias/003-indice.md`, tabela de prints a preencher).
+  ambiente, e um índice em `docs/evidencias/003-indice.md`. (CA-02, CA-04, CA-20, CA-21,
+  CA-22, CA-23; o CA-19 é provado pelos prints de produção da T17, dispensa do operador em 09/11/2026) — raiz. Evidência: PARCIAL, **os prints são do operador** (o agente não tem navegador e não instala Playwright). Preparado: `cbc2b66` (`cenarios-locais.sql`, validado em Postgres descartável: limite, atraso, um, limpar, e a guarda de porta) e `732f81b` (`docs/evidencias/003-indice.md`, tabela de prints a preencher).
 - [x] T17 Modelo `docs/specs/003-solicitar-emprestimo/evidencias-producao.md`: roteiro do operador
   com a conta de teste (nunca a do professor), a consulta do CA-24 e o SQL de limpeza (voltar o item
   para `DISPONIVEL` e apagar o empréstimo de teste), para **um** pedido de **um** item. Só prepara; **o operador executa**. (CA-24) — raiz. Evidência: `65ba3cc` (raiz); as consultas e a limpeza foram validadas em Postgres descartável; nada executado em produção.
