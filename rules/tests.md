@@ -29,12 +29,12 @@ existir e o que declarar enquanto não existe.
    front (Vitest) e mais nada: quem renderiza o componente em teste e faz as
    consultas não está em ADR nenhum, e biblioteca fora do ADR-001 o agente não
    escolhe — "proponha e espere" (`rules/restrictions.md`, "Autoridade").
-   Sem decisão do time registrada em ADR, a Tarefa 9 da 002 não instala nada:
+   Sem decisão do time registrada em ADR, a Tarefa 9 da 003 (antes 002-catalogo) não instala nada:
    ela segue pendente por decisão em aberto, não por falta de runner.
 3. Prova-se com teste o `CA-xx` que só se observa com interação ou DOM:
    clique, foco, `createPortal`, toast, timer, CSS aplicado. O resto pode ser
-   smoke de render — foi assim na 001 e na 002 —, porque o smoke não alcança
-   chips, busca, clique do modal, toast nem animação (002, "Como sei que
+   smoke de render — foi assim na 001 e na 003 —, porque o smoke não alcança
+   chips, busca, clique do modal, toast nem animação (003, "Como sei que
    funcionou").
 4. O arquivo de teste mora ao lado do que ele testa e leva o nome do testado:
    `front/src/pages/Catalogo.test.tsx` para `src/pages/Catalogo.tsx`. Um
@@ -51,7 +51,7 @@ existir e o que declarar enquanto não existe.
    (`rules/checks.md`, `rules/secrets.md`). O dado do front é o de exemplo
    (`src/data/demo.ts`) ou fixture do próprio teste.
 8. Teste que lê o relógio real quebra sozinho. O "hoje" do produto é
-   `HOJE_DEMO` (`src/data/demo.ts`) até a Q4 da 002 fechar (`tasks.md`,
+   `HOJE_DEMO` (`src/data/demo.ts`) até a Q4 da 003 fechar (`tasks.md`,
    Tarefa 12) — congele a data no teste em vez de chamar `new Date()` no
    caminho do produto.
 9. Quando o runner entrar, três coisas mudam junto: o passo 1 do

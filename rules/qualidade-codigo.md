@@ -70,7 +70,7 @@ contradizer, decida pelo motivo único.
 - Arquivo de `src/pages/` passando de ~200 linhas, ou função de ~30.
 - `any`, `as`, `!`, `@ts-ignore`, `eslint-disable`: silêncio no lugar de
   informação. O `!` de `useAuth((s) => s.usuario)!` em `Catalogo.tsx` e
-  `MeusEmprestimos.tsx` é dívida já registrada (Tarefa 15 da fatia 002); a
+  `MeusEmprestimos.tsx` é dívida já registrada (Tarefa 15 da fatia 003, antes chamada 002-catalogo); a
   correção é uma função só (`useUsuarioAtual()`), não o `!` repetido em duas
   telas.
 - A mesma derivação escrita em dois lugares. Exemplo real: a contagem de

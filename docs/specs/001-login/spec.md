@@ -68,7 +68,7 @@ existem — **dívida**, ver abaixo.
 - Q2: botão "Entrar como Operações →" do layout é atalho do protótipo. Não é
   implementado: o papel virá da membership, não de um botão.
 - Q3: recuperação de senha e convite de usuário.
-- Q4: menu/aba da área autenticada (vem com 002-catalogo). A área autenticada
+- Q4: menu/aba da área autenticada (vem com a 003-catalogo, antes chamada 002-catalogo). A área autenticada
   desta fatia é uma tela mínima com e-mail e "Sair".
 
 ## Como sei que funcionou
