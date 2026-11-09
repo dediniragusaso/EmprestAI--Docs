@@ -11,10 +11,29 @@ Nenhuma etapa escreve em produção. Todo comando do agente roda contra Postgres
 processo vence o `back/.env`, que aponta para o remoto). Os `.env` não são lidos nem editados.
 **Nada daqui vira código antes da Etapa 0** (spec aprovada e perguntas Q1 a Q13 respondidas).
 
-## Etapa 0 — Decisões (sem código)
-Objetivo: o operador aprova a spec e responde Q1 a Q13 (cada uma já traz proposta).
-Arquivos: só `spec.md` (registrar as respostas). Verificação: Q1, Q2, Q3, Q5, Q6, Q7 e Q13 têm
-resposta escrita; sem isso, as etapas 1, 2 e 3 e a prova em produção (Etapa 11) não começam. Atende: bloqueia CA-01 a CA-25.
+## Etapa 0 — Decisões (sem código) — FEITA
+Objetivo: o operador aprova a spec e responde Q1 a Q13. **Feita em 09/11/2026**: todas aceitas, com
+as precisões registradas na spec (Q3 privacidade, Q11 contagem na tela, Q12 ordem, Q13 prova local e
+um único pedido em produção). Cada pergunta trava as etapas abaixo; com as 13 respondidas, nenhuma
+está bloqueada:
+
+| Pergunta | Trava |
+|---|---|
+| Q1 tenant pelo vínculo | Etapa 2 (`TenantGuard`) e todas as rotas |
+| Q2 fuso `America/Sao_Paulo` | Etapa 2 (`Clock`), Etapas 3 e 4 (CA-16) |
+| Q3 sem nome de pessoa | Etapa 3 (resposta) e Etapa 8 (card) |
+| Q4 frases das recusas | Etapa 4 (`detail`) e Etapa 9 (toast) |
+| Q5 cliente à mão e Zod direto | Etapa 7 e todo o back |
+| Q6 `supertest` | Etapa 1 |
+| Q7 nome da pasta | Etapa 12 |
+| Q8 auditoria `loan.open` | Etapa 4 (CA-18) |
+| Q9 sem "A vencer" e sem "Devolver" | Etapa 10 |
+| Q10 quadro neutro sem foto | Etapa 8 (CA-02) |
+| Q11 cursor e contagem na tela | Etapa 3 (cursor), Etapa 7 (percorre as páginas), Etapa 8 (CA-23) |
+| Q12 ordem das verificações | Etapa 4 |
+| Q13 prova em produção | Etapa 11 |
+
+Arquivos: só `spec.md`. Atende: libera CA-01 a CA-26.
 
 ## Etapa 1 — Dependência de teste do back (Q6)
 Objetivo: `supertest` e `@types/supertest`, versões fixas, mostradas antes de instalar (rules/tests.md
@@ -61,7 +80,7 @@ Objetivo: o catálogo na API.
   12 sem repetir nem pular).
 Verificação: `npm run build` e `npm test`.
 
-## Etapa 4 — `POST /v1/loans`: regras e atomicidade (CA-05 a CA-09, CA-17, CA-18, CA-13, CA-14)
+## Etapa 4 — `POST /v1/loans`: regras e atomicidade (CA-05 a CA-09, CA-16, CA-17, CA-18, CA-13, CA-14)
 Objetivo: abrir empréstimo com as quatro recusas, sem concorrência ainda.
 - `back/src/modules/loans/loans.controller.ts` (`POST /loans`, corpo `{ equipmentId }` validado
   por Zod; ignora qualquer `tenantId` do corpo), `loans.service.ts` (`openLoan`),
@@ -70,7 +89,7 @@ Objetivo: abrir empréstimo com as quatro recusas, sem concorrência ainda.
   `loan-limit-reached`, `detail` do Q4).
 - `openLoan` roda numa transação interativa do Prisma, na ordem da R6: equipamento do tenant (404)
   → `status` (409) → atraso (409) → limite (409) → `INSERT` em `loans` com `due_at` = hoje + 14
-  → `UPDATE equipment SET status = 'EMPRESTADO'` → `INSERT` em `audit_logs` (`loan.open`). O
+  → `UPDATE equipment SET status = 'EMPRESTADO'` → `INSERT` em `audit_logs` (`action` `loan.open`, `resource_type` `loan`, `resource_id` do `loan`, `tenant_id` do guard, `actor_user_id` = `sub` do JWT). O
   relógio vem do `Clock` injetado. Falha em qualquer passo desfaz tudo.
 - Ponto de injeção de falha só para teste (o repositório de auditoria é um provider substituível),
   para o CA-06.
@@ -78,7 +97,8 @@ Objetivo: abrir empréstimo com as quatro recusas, sem concorrência ainda.
   banco), `CA-06` (auditoria falha, nada resta), `CA-07` (4º pedido), `CA-08` (atraso, e `dueAt`
   igual a hoje aceito), `CA-09` (manutenção e emprestado), `CA-17` (corpo inválido), `CA-18`
   (auditoria só no sucesso), `CA-13` (id de outro tenant dá 404 e corpo com `tenantId` é ignorado),
-  `CA-14` (401 e 403). O atraso é semeado por `INSERT` direto no banco descartável.
+  `CA-14` (401 e 403), `CA-16` (relógio congelado em D, inclusive às 23:59 e às 00:01 de
+  `America/Sao_Paulo`: o `dueAt` criado é D + 14). O atraso é semeado por `INSERT` direto no banco descartável.
 Verificação: `npm run build` e `npm test`.
 
 ## Etapa 5 — Concorrência e rede de segurança (CA-10, CA-11, CA-12)
@@ -108,7 +128,7 @@ Objetivo: Meus empréstimos na API.
   `CA-14` (401 e 403).
 Verificação: `npm run build` e `npm test`.
 
-## Etapa 7 — Front: camada de API e navegação (CA-22 parte)
+## Etapa 7 — Front: camada de API e navegação (CA-22 parte, CA-26)
 Objetivo: base das telas, sem tela nova ainda.
 - `front/src/lib/api.ts`: `getEquipment()` (percorre as páginas até `nextCursor` acabar),
   `postLoan(equipmentId)`, `getMyLoans()` e a classe `ApiProblem` (`status`, `code`, `detail`), todas
@@ -124,7 +144,7 @@ Objetivo: base das telas, sem tela nova ainda.
 - `front/src/index.css`: só as classes do ADR-003 §4 que faltarem (`.tag`, `.card`, `.dialog`,
   toast), reaproveitando os tokens existentes; nada de cor nova.
 Verificação: `cd front && npm run build` (exit 0). Busca: "O catálogo chega na próxima fatia" não
-existe em `front/src` (CA-22). Sem lint/typecheck/test (declarar).
+existe em `front/src` (CA-22), e `HOJE_DEMO` e `new Date()` não aparecem no código de datas (CA-26). Sem lint/typecheck/test (declarar).
 
 ## Etapa 8 — Front: catálogo (CA-02, CA-04, CA-22, CA-23)
 Objetivo: a tela do catálogo, só de leitura.
@@ -136,7 +156,8 @@ Objetivo: a tela do catálogo, só de leitura.
   `status` e `viewer`, R5 e R12). `front/src/lib/situacao.ts` concentra a tabela status → cor e
   rótulo (o padrão do `Pill` do ADR-003).
 - Ainda sem o clique de "Solicitar" (vem na Etapa 9).
-Verificação: `npm run build`. Evidência manual local (Etapa 11): prints dos CA-02, CA-04, CA-22, CA-23.
+A contagem "X de Y" é calculada aqui, na tela, com os itens carregados (Q11). Verificação:
+`npm run build`. Evidência manual local (Etapa 11): prints dos CA-02, CA-04, CA-22, CA-23.
 
 ## Etapa 9 — Front: solicitar e recusas (CA-19, CA-20)
 Objetivo: o fluxo de pedido, com o motivo da recusa em texto.
@@ -164,13 +185,17 @@ Objetivo: fechar os CA de "Tela" e a prova de produção, sem o agente escrever 
 - **Produção (operador):** `docs/specs/003-solicitar-emprestimo/evidencias-producao.md`, modelo
   criado na T17 (sem valor de segredo): login com a **conta de teste**, um pedido de um item, print do
   card "Está com você" e de Meus empréstimos; a consulta do CA-24 (zero empréstimos do professor) e o
-  **SQL de limpeza** preparado pelo agente e rodado pelo operador (Q13). O agente não executa nada
+  **SQL de limpeza** (voltar o item para `DISPONIVEL` e apagar o empréstimo de teste) preparado pelo
+  agente e rodado pelo operador no Supabase (Q13). Em produção, **um** pedido de **um** item. O agente não executa nada
   em produção e não usa a conta do professor.
 Verificação: um print por CA de tela, com data e ambiente; CA-24 com o resultado colado pelo operador.
 
-## Etapa 12 — Renumeração e nome da pasta (Q7, CA-25)
-Objetivo: os documentos que ainda dizem `003-catalogo` passam a apontar para esta pasta (ou a pasta é
-renomeada, se o operador preferir). Arquivos: `AGENTS.md`, `rules/spec-flow.md`, `rules/tests.md`,
+## Etapa 12 — Renumeração e referências antigas (Q7, CA-25)
+Objetivo: os documentos que ainda dizem `003-catalogo` passam a apontar para esta pasta, e duas
+referências antigas são acertadas: em `rules/tests.md`, "a Tarefa 9 da 003" (biblioteca de teste de
+componente, que **não** é tarefa desta fatia: vira "a tarefa de teste de componente, ainda sem
+fatia, ADR 002 reservado") e a "Q4 da 003 … Tarefa 12" do `HOJE_DEMO` (a data agora vem do servidor,
+R8); em `rules/qualidade-codigo.md`, `MeusEmprestimos.tsx` passa a `MeusEmprestimosPage.tsx`. Arquivos: `AGENTS.md`, `rules/spec-flow.md`, `rules/tests.md`,
 `rules/qualidade-codigo.md`. A `docs/specs/002-dados-iniciais/spec.md` **não** é editada: está
 `Status: PRONTA`, e qualquer mudança nela fora da linha de status invalida a evidência que o hook
 confere antes do push (`rules/spec-flow.md`); a frase do Q7 dela fica como histórico. Verificação:
