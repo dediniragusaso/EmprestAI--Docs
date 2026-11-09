@@ -270,8 +270,23 @@ componente ainda não foi decidida (ADR 002 reservado).
 - Crédito por foto na tela; o crédito do autor continua só no banco (002).
 - Qualquer escrita em produção feita pelo agente (rules/restrictions.md).
 
-### Decisões tomadas por quem escreveu a spec — aguardam aprovação do operador
-Cada uma tem proposta; nenhuma vira código sem o "de acordo".
+### Perguntas Q1 a Q13 — Decidido pelo operador em 09/11/2026
+**Decidido pelo operador em 09/11/2026:** a spec e as propostas de Q1 a Q13 foram aceitas, com as
+precisões abaixo. As propostas seguem escritas porque são o texto que o código obedece.
+- **Q3 (decisão de privacidade).** Sem nome de pessoa no catálogo: "Emprestado · devolução prevista
+  até DD/MM/AAAA" e "Está com você". **Diferença registrada do `layout.md` §5.2**, que mostra "Com
+  {pessoa} · devolver até {data}": o layout continua como está; esta fatia segue a decisão de
+  privacidade (cada pessoa vê só os próprios empréstimos).
+- **Q11.** A contagem "X de Y" é feita **na tela**, a partir dos itens carregados (a API não devolve
+  contagem).
+- **Q12.** Ordem das verificações: equipamento, depois atraso, depois limite.
+- **Q13.** Limite de 3 e atraso são provados no banco **local**. Em produção, só **um** pedido, com a
+  conta de teste (nunca a do professor). O SQL de limpeza (voltar o item para `DISPONIVEL` e apagar o
+  empréstimo de teste) fica documentado e **o operador o executa** no Supabase.
+- **Q6.** Instalar `supertest` está autorizado (T1); nenhuma outra dependência nova.
+- T0 aprovada. Questões Q1 a Q13 já não estão em aberto.
+
+Texto original das perguntas, com a proposta de cada uma:
 - **Q1 — Origem do tenant.** O ADR-001 §6 diz "claim do JWT, resolvido no guard", mas o JWT do
   Supabase de hoje não traz tenant e o guard só devolve `id` e `email`. *Proposta:* o guard consulta
   `memberships` (usuário → tenant `suporte_ti`) e coloca `tenantId` no contexto do request; sem
