@@ -21,9 +21,20 @@ Só usam recursos nativos do Node e o sharp. A chave vem de `back/.env` via
    800x600 com o sharp, grava em `back/.preparo-imagens/final/<patrimonio>.jpg` e
    atualiza `back/.preparo-imagens/manifesto.json`. Rodar de novo mantém as fotos já
    escolhidas; só troca a que foi reprovada. Opções (depois de `--`):
-   - `--escolher=TI-0002:<id>` (repetível) fixa a foto de um equipamento, desde que o id esteja
-     no resultado da busca original e passe as mesmas checagens. Serve para escolher, entre
-     as candidatas, a que passou na pré-triagem visual.
+   - `--escolher=TI-0002:<id>` (repetível) fixa a foto de um equipamento e passa pelas mesmas
+     checagens (origem ≥ 800x600, id não reprovado, id não repetido). Se o id não estiver no
+     resultado da busca, ele é consultado na mesma API do Pixabay (parâmetro `id`), então
+     serve também para uma foto escolhida à mão. Cada id só pode servir a um equipamento.
+   - `--posicao=TI-0011:left` (repetível) muda a posição do recorte "cover" do sharp
+     (`centre` é o padrão; aceita `left`, `right`, `top`, `bottom`, `west`, `east`, `north`,
+     `south`, as diagonais, `entropy` e `attention`). O recorte só **desloca** o
+     enquadramento: a escala é uniforme e a imagem nunca é esticada (conferido por comparação
+     de pixels). A folga depende da proporção da origem: em foto 3:2 (1280x853) sobram 100 px na
+     horizontal e 0 na vertical, ou seja, o enquadramento se desloca até 50 px para cada
+     lado a partir do centro; em 16:9 sobram cerca de 265 px; em 4:3 não sobra nada. Só serve
+     para tirar do quadro uma marca que esteja a menos de 50 px da borda lateral do recorte
+     centralizado. Repetir o comando com outro `--posicao` refaz o recorte da mesma foto;
+     o manifesto guarda a posição em `recorte`.
    - `--pular=TI-0005,TI-0006` deixa os equipamentos sem foto (e sem arquivo) quando nenhuma
      candidata presta, em vez de aceitar uma foto já julgada ruim. O `validar` acusa
      "sem entrada no manifesto" para eles.
