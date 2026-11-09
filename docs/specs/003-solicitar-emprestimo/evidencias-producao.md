@@ -23,10 +23,11 @@ Pixabay" com link.
 - [ ] Prints: `docs/evidencias/003-prod-catalogo.png` (12 cards) e `docs/evidencias/003-prod-rodape.png` (rodapé "Fotos: Pixabay"): ____
 
 ## 2. Um pedido, de um item (CA-05, CA-19)
+**Estes prints são a prova do CA-19**: o operador dispensou os prints locais equivalentes em 09/11/2026.
 Clique em "Solicitar" em **um** equipamento disponível (sugestão: o de menor patrimônio) e confirme.
 Esperado: modal com "Devolver até" = hoje + 14, toast de confirmação, e o card passa a "Está com você".
 - [ ] Equipamento pedido (patrimônio): ____   "Devolver até" mostrado: ____
-- [ ] Prints: `docs/evidencias/003-prod-ca19-modal.png` (modal aberto, antes de confirmar) e `docs/evidencias/003-prod-ca19-resultado.png` (toast, ou o card "Está com você" se perder o toast): ____
+- [ ] Prints: `docs/evidencias/003-prod-ca19-modal.png` (modal aberto, antes de confirmar) e `docs/evidencias/003-prod-ca19-resultado.png` (toast "Empréstimo registrado…"; se perder o toast, rode a limpeza do passo 5 e repita o pedido, ou registre o card "Está com você"): ____
 
 ## 3. Meus empréstimos (CA-21)
 Esperado: "1 de 3 itens em seu nome · prazo padrão de 14 dias", uma linha "Em dia", sem botão "Devolver".
@@ -91,7 +92,7 @@ permanece: 1).
 |---|---|---|
 | CA-02 | | 1 |
 | CA-05 | | 2 e 4 |
-| CA-19 | | 2 |
+| CA-19 | | 2 (prints de produção; os locais foram dispensados pelo operador em 09/11/2026) |
 | CA-21 | | 3 |
 | CA-22 | | 1 |
 | CA-24 | | 4 e 6 |
