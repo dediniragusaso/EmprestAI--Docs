@@ -48,9 +48,9 @@ Se algo nao estiver escrito em lugar nenhum, pergunte — nao decida.
 ## Procedimentos
 
 ## Subagentes
-- Ficam em agents/<nome>.md. O frontmatter diz quando delegar; o
+- Ficam em .claude/agents/<nome>.md. O frontmatter diz quando delegar; o
   corpo e a instrucao completa do subagente.
 - Subagente nao herda esta conversa: ao delegar, passe tudo que o
   arquivo dele pede como entrada.
 - Se o harness nao tiver subagentes, abra uma sessao nova e comece
-  com: "Aja conforme agents/<nome>.md." e as entradas pedidas.
+  com: "Aja conforme .claude/agents/<nome>.md." e as entradas pedidas.

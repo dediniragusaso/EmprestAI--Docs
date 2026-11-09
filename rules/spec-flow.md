@@ -63,8 +63,9 @@ da spec da fatia.
   recorte. A spec diz o que ESTA fatia faz e como sei que funcionou.
 
 ## Antes de declarar uma spec pronta
-- Delegue ao subagente verificador-spec (agents/verificador-spec.md),
-  passando o caminho da spec e o intervalo de commits.
+- Delegue ao subagente verificador-spec (.claude/agents/verificador-spec.md),
+  passando o caminho da spec e um intervalo de commits por repositório
+  (raiz, front, back).
 - A spec só é pronta com "Veredito: PRONTA". Qualquer outro resultado
   volta para as tarefas — quem corrige é o agente principal, nunca o
   verificador.
