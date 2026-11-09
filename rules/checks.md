@@ -22,7 +22,7 @@ Sempre que você for dizer "pronto", "implementado" ou "funcionando".
    um banco **local** e confirme que o banco sobe do zero com todas as
    migrations (incluindo o SQL de RLS, que vive no Prisma Migrate).
    O `.env` real aponta para o Supabase remoto — nunca rode reset com
-   `DATABASE_URL`/`DIRECT_DATABASE_URL` do ambiente remoto.
+   `DATABASE_URL`/`DIRECT_URL` do ambiente remoto.
 3. Rode build antes de qualquer push — build que quebra na Vercel é o
    feedback mais lento e mais caro deste projeto:
    `cd back && npm run build && cd ../front && npm run build`

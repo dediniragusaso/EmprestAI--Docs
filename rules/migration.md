@@ -1,6 +1,6 @@
 ---
 description: Procedimento para qualquer mudança de schema
-globs: ["backend/prisma/migrations/**", "backend/prisma/schema.prisma"]
+globs: ["back/prisma/migrations/**", "back/prisma/schema.prisma"]
 alwaysApply: false
 ---
 

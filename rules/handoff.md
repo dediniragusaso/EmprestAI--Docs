@@ -14,9 +14,10 @@ dizer "pronto". Vale também quando a implementação fica pela metade: o
 handoff registra o estado real, inclusive o que falhou.
 
 Um arquivo por implementação, novo a cada vez:
-`docs/handoffs/AAAA-MM-DD-<assunto-curto>.md`. O `docs/` versionado é o do
-repositório do front (`emprest.ai-front`) — handoff escrito na cópia de
-`docs/` da raiz do workspace não é commitado em lugar nenhum.
+`docs/handoffs/AAAA-MM-DD-<assunto-curto>.md`. O `docs/` versionado é o da raiz do workspace
+(repositório próprio). `front/` e `back/` têm cada um o seu `.git` e não guardam
+handoff: o que for escrito em `front/docs/` não é commitado na raiz nem lido
+pelo verificador.
 
 Divergência consciente da aula 3: lá o handoff é um só, `docs/handoff.md`,
 sobrescrito a cada sessão, e "entradas datadas de todas as sessões" é uma das
@@ -60,5 +61,5 @@ exato" ou sem o resultado dos checks não conta como handoff.
 - Não carregue todos os handoffs ao retomar: leia só o mais recente (data mais
   alta no nome) e abra um antigo apenas se for citado por nome.
 - Não use o handoff como fonte de verdade do produto: o que manda é a spec da
-  fatia, o `docs/PRD.md`, o `docs/layout.md` e os ADRs.
+  fatia, o `docs/PRD.md`, o `layout.md` e os ADRs.
 - Não duplique o `AGENTS.md`, o `rules/` ou a spec dentro do handoff.

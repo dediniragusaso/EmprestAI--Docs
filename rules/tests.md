@@ -9,11 +9,11 @@ alwaysApply: true
 
 ## Quando
 Sempre que você for criar ou mudar um arquivo de teste, e antes de dizer que um
-`CA-xx` está atendido. Vale para as duas pontas: componente no `frontend/` e
-rota no `backend/`.
+`CA-xx` está atendido. Vale para as duas pontas: componente no `front/` e
+rota no `back/`.
 
-Nenhum runner existe hoje nos dois repositórios: `frontend/package.json` tem
-`dev`, `build`, `lint`, `typecheck` e `preview`, e a pasta `backend/` ainda não
+Nenhum runner existe hoje nos dois repositórios: `front/package.json` tem
+`dev`, `build`, `lint`, `typecheck` e `preview`, e a pasta `back/` ainda não
 tem `package.json` (nem `src/`). Este arquivo diz o que fazer quando o runner
 existir e o que declarar enquanto não existe.
 
@@ -37,7 +37,7 @@ existir e o que declarar enquanto não existe.
    chips, busca, clique do modal, toast nem animação (002, "Como sei que
    funcionou").
 4. O arquivo de teste mora ao lado do que ele testa e leva o nome do testado:
-   `frontend/src/pages/Catalogo.test.tsx` para `src/pages/Catalogo.tsx`. Um
+   `front/src/pages/Catalogo.test.tsx` para `src/pages/Catalogo.tsx`. Um
    arquivo por arquivo testado; nada de pasta `__tests__` nem de teste "geral"
    da aplicação.
 5. O nome do caso carrega o `CA-xx` que ele prova —
