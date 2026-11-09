@@ -20,7 +20,7 @@ Data da execução: 09/11/2026   Quem executou: o operador, com a conta de teste
 Abra o front publicado (`https://emprest-ai-six.vercel.app`), entre com a **conta de teste** e vá a
 **Catálogo**. Esperado: 12 cards com foto, "9 de 12 equipamentos disponíveis agora", rodapé "Fotos:
 Pixabay" com link.
-- [x] Prints: `docs/evidencias/003-prod-catalogo.png` e `docs/evidencias/003-prod-rodape.png`. O de catálogo mostra "9 de 12 equipamentos disponíveis agora", os 4 chips, o e-mail da conta de teste e **6 dos 12 cards** (TI-0001 a TI-0003 com foto, e o início de outros três); o de rodapé mostra TI-0010 ("Em manutenção", "Indisponível"), TI-0011 e TI-0012 e o texto "Fotos: Pixabay" com o link sublinhado. Os 12 cards não aparecem juntos em um só print.
+- [x] Prints: `docs/evidencias/003-prod-catalogo.png` e `docs/evidencias/003-prod-rodape.png`. O de catálogo mostra "9 de 12 equipamentos disponíveis agora", os 4 chips, o e-mail da conta de teste e **6 dos 12 cards** (TI-0001 a TI-0003 com foto, e o início de outros três); o de rodapé mostra TI-0010 ("Em manutenção", "Indisponível"), TI-0011 e TI-0012 e o texto "Fotos: Pixabay" com o link sublinhado. Os cards 7 a 9 estão em `docs/evidencias/003-prod-catalogo-2.png` (print extra, conta de teste, 09/11/2026; o arquivo, reduzido, mostra na verdade os 12 cards juntos em grade 3x4, TI-0001 a TI-0012). Com `003-prod-catalogo.png` (cards 1 a 6), `003-prod-catalogo-2.png` (7 a 9) e `003-prod-rodape.png` (10 a 12), os 12 cards ficam provados (CA-02).
 
 ## 2. Um pedido, de um item (CA-05, CA-19)
 **Estes prints são a prova do CA-19**: o operador dispensou os prints locais equivalentes em 09/11/2026.
@@ -100,7 +100,7 @@ cumpre o CA-24, mas o histórico de auditoria em produção guarda um `loan.open
 ## Resultado por CA
 | CA | Atendido em produção? | Onde está a prova |
 |---|---|---|
-| CA-02 | Parcial: print com o cabeçalho e 6 dos 12 cards, mais o rodapé com os 3 últimos; os 12 não aparecem juntos | 1 |
+| CA-02 | Sim: `003-prod-catalogo.png` (cards 1 a 6), `003-prod-catalogo-2.png` (7 a 9; o arquivo traz os 12 reduzidos) e `003-prod-rodape.png` (10 a 12). O quadro neutro para item sem foto não tem print (os 12 itens têm foto) | 1 |
 | CA-05 | Sim: TI-0001 pedido, `total_emprestimos` 1, `disponivel` 8 (resultado informado) | 2, 4 e 5.1 |
 | CA-19 | Sim: modal com "Devolver até 23/11/2026", toast e card "Está com você" | 2 (prints de produção; os locais foram dispensados pelo operador em 09/11/2026) |
 | CA-21 | Parcial: só o caso de 1 empréstimo em produção; vazio, 3 e atraso são dos prints locais (pendentes) | 3 |

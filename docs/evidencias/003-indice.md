@@ -10,8 +10,10 @@ Windows: `Win + Shift + S` (recorte) ou `Win + PrtScn` (salva em Imagens\Captura
 dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
 
 ## Situação em 09/11/2026
-- **Existem** (conferidos pelo agente): os 5 prints de produção, itens 1 a 5, com os nomes exatos. O
-  print 1 mostra 6 dos 12 cards (os 3 últimos estão no print 2). O item 6 (textos do SQL) está
+- **Existem** (conferidos pelo agente): os 5 prints de produção, itens 1 a 5, com os nomes exatos, e o
+  print extra `003-prod-catalogo-2.png` (item 1b). CA-02: `003-prod-catalogo.png` mostra os cards 1 a 6,
+  `003-prod-catalogo-2.png` os cards 7 a 9 (o arquivo, reduzido, mostra na verdade os 12 cards juntos,
+  TI-0001 a TI-0012, em grade 3x4) e `003-prod-rodape.png` os cards 10 a 12; juntos provam os 12. O item 6 (textos do SQL) está
   registrado no `evidencias-producao.md`, com a nota do engano com a conta do professor.
 - **Dispensados** pelo operador: os locais 9, 10 e 11 (CA-19).
 - **PENDENTES** (prints locais, nenhum arquivo existe ainda):
@@ -24,6 +26,7 @@ dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
 | # | CA | Arquivo | O que precisa estar visível | Data | Ambiente |
 |---|---|---|---|---|---|
 | 1 | CA-02 | `003-prod-catalogo.png` | 12 cards com foto 4:3, nome, categoria, patrimônio, pill; "9 de 12 equipamentos disponíveis agora"; chips; e-mail da conta de teste | 09/11/2026 | Produção (Vercel), conta de teste |
+| 1b | CA-02 | `003-prod-catalogo-2.png` | os cards TI-0007 a TI-0009 (o arquivo, reduzido, traz os 12 cards em grade 3x4) | 09/11/2026 | Produção (Vercel), conta de teste |
 | 2 | CA-22 | `003-prod-rodape.png` | rodapé "Fotos: Pixabay" com o link | 09/11/2026 | Produção (Vercel), conta de teste |
 | 3 | CA-19 (prova) | `003-prod-ca19-modal.png` | modal "Solicitar empréstimo" com o equipamento e "Devolver até" (hoje + 14) | 09/11/2026 | Produção (Vercel), conta de teste |
 | 4 | CA-19 (prova) | `003-prod-ca19-resultado.png` | toast "Empréstimo registrado…"; se perder o toast, repita (limpeza 5.2 do `evidencias-producao.md` e novo pedido) ou registre o card "Está com você" como resultado | 09/11/2026 | Produção (Vercel), conta de teste |
