@@ -34,7 +34,8 @@ então o `migrate reset` não se aplica. Nenhuma tarefa escreve em produção ne
 - [ ] T10 `GET /v1/loans/mine`: só os abertos da pessoa, `state` e cursor, com os casos no
   `loans.controller.spec.ts`. (CA-15, CA-13, CA-14) — back.
 - [ ] T11 Front: camada de API (`getEquipment` com todas as páginas, `postLoan`, `getMyLoans`,
-  `ApiProblem`) em `front/src/lib/api.ts` e `front/src/lib/dates.ts` sem `new Date()`. (CA-26) — front.
+  `ApiProblem`) em `front/src/lib/api.ts` e `front/src/lib/dates.ts` sem `new Date()`. Ao fim, rodar a busca de texto do CA-26 em `front/src` (`HOJE_DEMO`, `new Date(`) e
+  colar o resultado (vazio para datas de produto) na evidência desta tarefa. (CA-26) — front.
 - [ ] T12 Front: `AppShell` com as abas, rotas `/catalogo` e `/meus-emprestimos`, `/` redireciona,
   remoção de `HomePage` e do placeholder, e as classes do ADR-003 §4 que faltam em `index.css`.
   (CA-22) — front.
