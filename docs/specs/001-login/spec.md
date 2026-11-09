@@ -1,5 +1,7 @@
 # 001 — Login
 
+Status: EM ABERTO
+
 ## Objetivo
 Pessoa com conta entra com e-mail e senha, chega a uma área autenticada e sai.
 A API reconhece quem é a pessoa a partir do token. Nesta fatia não existem
@@ -46,6 +48,18 @@ existem — **dívida**, ver abaixo.
   com mais de um endpoint de negócio.
 - Sem Prisma, Sentry, pino e rate limit nesta fatia.
 - Spec escrita junto com o código a pedido do time ("faça tudo rápido").
+- CAs sem teste que os cite (`verificacao-rodada-1.md`, NÃO PRONTA):
+  - CA-01 a CA-04: sem teste HTTP (supertest não instalado). O Jest só cobre o
+    verificador de JWT (`back/src/modules/auth/jwt-verifier.service.spec.ts`),
+    sem citar CA e sem exercitar `/v1/health` nem `/v1/me`.
+  - CA-05 a CA-09: o front não tem runner de teste; a biblioteca de render de
+    componente depende de decisão do time (`rules/tests.md`, ADR 002 reservado).
+  - CA-10: só conferência de arquivo, sem teste.
+- Fora de escopo desta spec, vindo depois: `back/prisma/` (schema, migration
+  `init`, seed) e o `postinstall` com `prisma generate` (commit `9e151db`,
+  modelagem aprovada em 2026-10-19), e `back/src/modules/root/root.controller.ts`
+  (`GET /`, commit `24b9609`). Contrariam "Sem Prisma" acima e não foram
+  revertidos; pertencem às fatias seguintes.
 
 ## Fora de escopo / não decidido
 - Q1: origem de `nome` e `papel` (Colaborador/Operações). Depende da tabela
