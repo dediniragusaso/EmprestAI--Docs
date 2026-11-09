@@ -8,7 +8,7 @@ Sistema de emprestimo de equipamentos internos de TI (notebooks, monitores, cabo
 - docs/adr/ — decisoes tecnicas ja tomadas e o motivo delas: 001-stack (aceito) e 003-design-system (aceito em 63a264d). O numero 002 esta reservado para a biblioteca de teste de componente.
 - docs/modelagem-banco.md — modelagem do banco, aprovada em 2026-10-19; implementada em back/prisma/.
 - layout.md (raiz; ha copia em front/layout.md) — spec visual das telas.
-- docs/specs/<NNN-funcionalidade>/ — spec, plano e tarefas de cada feature. Existem 001-login e 002-dados-iniciais; a proxima e 003-catalogo (o catalogo que o PRD previa como 002 foi renumerado para 003).
+- docs/specs/<NNN-funcionalidade>/ — spec, plano e tarefas de cada feature. Existem 001-login e 002-dados-iniciais; existe tambem 003-solicitar-emprestimo (catalogo e solicitar emprestimo; o catalogo que o PRD previa como 002 foi renumerado para 003). A spec 003 esta EM ABERTO.
 - rules/ — como se trabalha aqui (9 arquivos: checks, handoff, migration, operacao, qualidade-codigo, restrictions, secrets, spec-flow, tests). Leia rules/restrictions.md sempre.
 
 ## Comandos
@@ -42,7 +42,8 @@ Se algo nao estiver escrito em lugar nenhum, pergunte — nao decida.
 - front/ (Vite + React + Tailwind): tela de login, rota protegida e sessao via supabase-js (001-login). Dependencias de dados ja instaladas: TanStack Query, React Hook Form, Zod, React Router. Sem runner de teste, sem lint e sem typecheck como script.
 - back/ (NestJS): config de ambiente validada com Zod, verificacao de JWT por JWKS, guard de auth, filtro Problem Details e os endpoints `GET /`, `GET /v1/health` e `GET /v1/me` (back/src). Jest configurado; ha um spec do verificador de JWT.
 - back/prisma/: schema (Tenant, User, Membership, Equipment, Loan, AuditLog), migration `init` com RLS `deny_all`, indices parciais e trigger de auditoria, e seed que cria so o tenant `suporte_ti`. O commit 9e151db registra a migration verificada com `migrate reset` no banco local.
-- Ainda nao existe: spec 003 em diante, endpoints de equipamento e de emprestimo, cliente gerado por orval, teste de componente (biblioteca nao decidida), E2E.
+- 003-solicitar-emprestimo (EM ABERTO): back com `GET /v1/equipment`, `POST /v1/loans` e `GET /v1/loans/mine` (Jest, supertest e Testcontainers); front com as telas Catalogo e Meus emprestimos. Falta a prova de tela (prints) e a de producao, que sao do operador.
+- Ainda nao existe: devolucao (PRD item 4), tela de Operacoes (item 5), cliente gerado por orval, teste de componente (biblioteca nao decidida), E2E.
 - ADR 003 esta como Aceito (commit 63a264d, 2026-11-09).
 
 ## Procedimentos

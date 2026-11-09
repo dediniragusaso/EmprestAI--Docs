@@ -29,8 +29,8 @@ existir e o que declarar enquanto não existe.
    front (Vitest) e mais nada: quem renderiza o componente em teste e faz as
    consultas não está em ADR nenhum, e biblioteca fora do ADR-001 o agente não
    escolhe — "proponha e espere" (`rules/restrictions.md`, "Autoridade").
-   Sem decisão do time registrada em ADR, a Tarefa 9 da 003 (antes 002-catalogo) não instala nada:
-   ela segue pendente por decisão em aberto, não por falta de runner.
+   Sem decisão do time registrada em ADR, a tarefa de teste de componente do front (ADR 002 reservado, ainda sem fatia: a 003
+   não a inclui) não instala nada: ela segue pendente por decisão em aberto, não por falta de runner.
 3. Prova-se com teste o `CA-xx` que só se observa com interação ou DOM:
    clique, foco, `createPortal`, toast, timer, CSS aplicado. O resto pode ser
    smoke de render — foi assim na 001 e na 003 —, porque o smoke não alcança
@@ -50,10 +50,9 @@ existir e o que declarar enquanto não existe.
 7. Nenhum teste fala com o Supabase remoto nem com banco que não seja local
    (`rules/checks.md`, `rules/secrets.md`). O dado do front é o de exemplo
    (`src/data/demo.ts`) ou fixture do próprio teste.
-8. Teste que lê o relógio real quebra sozinho. O "hoje" do produto é
-   `HOJE_DEMO` (`src/data/demo.ts`) até a Q4 da 003 fechar (`tasks.md`,
-   Tarefa 12) — congele a data no teste em vez de chamar `new Date()` no
-   caminho do produto.
+8. Teste que lê o relógio real quebra sozinho. O "hoje" do produto vem
+   do servidor (spec 003, R8): no back o `Clock` é injetável e o teste o congela; o front não
+   calcula "hoje" (sem `HOJE_DEMO` nem `new Date()` no caminho do produto).
 9. Quando o runner entrar, três coisas mudam junto: o passo 1 do
    `rules/checks.md` passa a incluir `npm run test` no front, a Verificação do
    `rules/qualidade-codigo.md` idem, e a linha da Tarefa 9 no `tasks.md` vira

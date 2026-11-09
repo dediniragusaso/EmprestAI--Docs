@@ -19,7 +19,7 @@ pelo hook de "Gatilho obrigatório".
 
 ## Procedimento
 1. Crie `docs/specs/<NNN-nome-curto>/` — três dígitos, nome curto em
-   kebab-case, na ordem do PRD (`001-login`, `002-dados-iniciais`, `003-catalogo`, ...). Sem
+   kebab-case, na ordem do PRD (`001-login`, `002-dados-iniciais`, `003-solicitar-emprestimo`, ...). Sem
    pasta de spec fora desse padrão.
 2. `spec.md` primeiro, com os seis títulos, sempre nesta ordem: Objetivo,
    Vínculo, Regras, Critérios de aceitação, Fora de escopo. Quando a fatia
