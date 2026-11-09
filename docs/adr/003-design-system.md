@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposto. Escrito em 2026-10-01 a pedido do time de EMPREST.AI, para revisão e
+Aceito. Escrito em 2026-10-01 a pedido do time de EMPREST.AI, para revisão e
 aceite (`rules/restrictions.md`, "Autoridade"). Não contraria o ADR-001; o
 número 002 fica reservado para a biblioteca de teste de componente (handoff de
 2026-09-28).
