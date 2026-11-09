@@ -122,6 +122,6 @@ commit;
 | CA-02 | Sim: `003-prod-catalogo.png` (cards 1 a 6), `003-prod-catalogo-2.png` (7 a 9; o arquivo traz os 12 reduzidos) e `003-prod-rodape.png` (10 a 12). O quadro neutro para item sem foto não tem print (os 12 itens têm foto) | 1 |
 | CA-05 | Sim: TI-0001 pedido, `total_emprestimos` 1, `disponivel` 8 (resultado informado) | 2, 4 e 5.1 |
 | CA-19 | Sim: modal com "Devolver até 23/11/2026", toast e card "Está com você" | 2 (prints de produção; os locais foram dispensados pelo operador em 09/11/2026) |
-| CA-21 | Parcial: só o caso de 1 empréstimo em produção; vazio, 3 e atraso são dos prints locais (pendentes) | 3 |
+| CA-21 | Parcial: 1 empréstimo (`003-prod-meus.png`) e vazio (`003-prod-ca21-vazio.png`, produção). **SEM PROVA** (o operador decidiu não produzir, por prazo): 3 empréstimos e atraso em Meus empréstimos | 3 |
 | CA-22 | Sim: rodapé "Fotos: Pixabay" com link; o placeholder não existe (busca de texto) | 1 |
 | CA-24 | Sim: estado final com professor em 0 empréstimos, 9 DISPONIVEL e 3 MANUTENCAO. Desvio da R14 registrado na nota acima; o operador decidiu que não reprova o CA-24 | 4, 5 e 6 |
