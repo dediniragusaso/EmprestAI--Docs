@@ -4,6 +4,8 @@ Provas manuais dos CA de "Tela" (sem Playwright, decisão do operador). **O agen
 nesta sessão e não tirou nenhum print**: a captura é do operador. Todos os arquivos ficam **nesta
 pasta** (`docs/evidencias/`), com o nome exato da coluna "Arquivo". Preencha data e ambiente.
 
+**CA-19 = prints de produção (itens 3 e 4).** Os prints locais 9, 10 e 11 foram dispensados pelo operador em 09/11/2026.
+
 Windows: `Win + Shift + S` (recorte) ou `Win + PrtScn` (salva em Imagens\Capturas de tela). O toast
 dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
 
@@ -12,8 +14,8 @@ dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
 |---|---|---|---|---|---|
 | 1 | CA-02 | `003-prod-catalogo.png` | 12 cards com foto 4:3, nome, categoria, patrimônio, pill; "9 de 12 equipamentos disponíveis agora"; chips; e-mail da conta de teste | | |
 | 2 | CA-22 | `003-prod-rodape.png` | rodapé "Fotos: Pixabay" com o link | | |
-| 3 | CA-19 | `003-prod-ca19-modal.png` | modal "Solicitar empréstimo" com o equipamento e "Devolver até" (hoje + 14) | | |
-| 4 | CA-19 | `003-prod-ca19-resultado.png` | toast "Empréstimo registrado…" (ou, se perder o toast, o card "Está com você") | | |
+| 3 | CA-19 (prova) | `003-prod-ca19-modal.png` | modal "Solicitar empréstimo" com o equipamento e "Devolver até" (hoje + 14) | | |
+| 4 | CA-19 (prova) | `003-prod-ca19-resultado.png` | toast "Empréstimo registrado…"; se perder o toast, repita (limpeza 5.2 do `evidencias-producao.md` e novo pedido) ou registre o card "Está com você" como resultado | | |
 | 5 | CA-21 | `003-prod-meus.png` | "1 de 3 itens em seu nome · prazo padrão de 14 dias", uma linha "Em dia", sem botão "Devolver" | | |
 | 6 | CA-24 | (texto) | resultado das consultas, colado em `docs/specs/003-solicitar-emprestimo/evidencias-producao.md` (passos 4 a 6) | | |
 
@@ -22,9 +24,9 @@ dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
 |---|---|---|---|---|---|
 | 7 | CA-04 | `um`, conta de teste | `003-local-ca04-esta-com-voce.png` | TI-0001 "Está com você · devolução prevista até…" e um card em manutenção com "Indisponível" | |
 | 8 | CA-04 | `um`, professor **local** | `003-local-ca04-emprestado-outra-pessoa.png` | TI-0001 "Emprestado · devolução prevista até…", botão "Emprestado", sem nome de pessoa | |
-| 9 | CA-19 | `limpar` | `003-local-ca19-modal.png` | modal aberto com "Devolver até" | |
-| 10 | CA-19 | `limpar` | `003-local-ca19-toast.png` | toast verde de confirmação | |
-| 11 | CA-19 | (após o pedido) | `003-local-ca19-resultado.png` | card "Está com você" no catálogo | |
+| 9 | CA-19 | — | ~~`003-local-ca19-modal.png`~~ | **DISPENSADO** pelo operador em 09/11/2026: o CA-19 é provado pelos prints de produção 3 e 4 | |
+| 10 | CA-19 | — | ~~`003-local-ca19-toast.png`~~ | **DISPENSADO** (idem) | |
+| 11 | CA-19 | — | ~~`003-local-ca19-resultado.png`~~ | **DISPENSADO** (idem) | |
 | 12 | CA-20 | `limite` | `003-local-ca20-limite.png` | "Limite de 3 itens" desabilitado nos cards disponíveis | |
 | 13 | CA-20 | `atraso` | `003-local-ca20-atraso.png` | banner vermelho de atraso e "Bloqueado por atraso" | |
 | 14 | CA-20 | duas janelas | `003-local-ca20-recusa-409.png` | toast vermelho com o motivo em texto ("Emprestado: outra pessoa acabou de ficar com este equipamento.") | |
