@@ -9,15 +9,26 @@ pasta** (`docs/evidencias/`), com o nome exato da coluna "Arquivo". Preencha dat
 Windows: `Win + Shift + S` (recorte) ou `Win + PrtScn` (salva em Imagens\Capturas de tela). O toast
 dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
 
+## Situação em 09/11/2026
+- **Existem** (conferidos pelo agente): os 5 prints de produção, itens 1 a 5, com os nomes exatos. O
+  print 1 mostra 6 dos 12 cards (os 3 últimos estão no print 2). O item 6 (textos do SQL) está
+  registrado no `evidencias-producao.md`, com a nota do engano com a conta do professor.
+- **Dispensados** pelo operador: os locais 9, 10 e 11 (CA-19).
+- **PENDENTES** (prints locais, nenhum arquivo existe ainda):
+  - CA-04: item 7 `003-local-ca04-esta-com-voce.png`, item 8 `003-local-ca04-emprestado-outra-pessoa.png`
+  - CA-20: item 12 `003-local-ca20-limite.png`, item 13 `003-local-ca20-atraso.png`, item 14 `003-local-ca20-recusa-409.png`
+  - CA-21: item 15 `003-local-ca21-vazio.png`, item 16 `003-local-ca21-um.png`, item 17 `003-local-ca21-tres.png`, item 18 `003-local-ca21-atraso.png`
+  - CA-23: item 19 `003-local-ca23-busca.png`, item 20 `003-local-ca23-chip.png`
+
 ## Produção (Vercel, conta de teste; nunca a do professor)
 | # | CA | Arquivo | O que precisa estar visível | Data | Ambiente |
 |---|---|---|---|---|---|
-| 1 | CA-02 | `003-prod-catalogo.png` | 12 cards com foto 4:3, nome, categoria, patrimônio, pill; "9 de 12 equipamentos disponíveis agora"; chips; e-mail da conta de teste | | |
-| 2 | CA-22 | `003-prod-rodape.png` | rodapé "Fotos: Pixabay" com o link | | |
-| 3 | CA-19 (prova) | `003-prod-ca19-modal.png` | modal "Solicitar empréstimo" com o equipamento e "Devolver até" (hoje + 14) | | |
-| 4 | CA-19 (prova) | `003-prod-ca19-resultado.png` | toast "Empréstimo registrado…"; se perder o toast, repita (limpeza 5.2 do `evidencias-producao.md` e novo pedido) ou registre o card "Está com você" como resultado | | |
-| 5 | CA-21 | `003-prod-meus.png` | "1 de 3 itens em seu nome · prazo padrão de 14 dias", uma linha "Em dia", sem botão "Devolver" | | |
-| 6 | CA-24 | (texto) | resultado das consultas, colado em `docs/specs/003-solicitar-emprestimo/evidencias-producao.md` (passos 4 a 6) | | |
+| 1 | CA-02 | `003-prod-catalogo.png` | 12 cards com foto 4:3, nome, categoria, patrimônio, pill; "9 de 12 equipamentos disponíveis agora"; chips; e-mail da conta de teste | 09/11/2026 | Produção (Vercel), conta de teste |
+| 2 | CA-22 | `003-prod-rodape.png` | rodapé "Fotos: Pixabay" com o link | 09/11/2026 | Produção (Vercel), conta de teste |
+| 3 | CA-19 (prova) | `003-prod-ca19-modal.png` | modal "Solicitar empréstimo" com o equipamento e "Devolver até" (hoje + 14) | 09/11/2026 | Produção (Vercel), conta de teste |
+| 4 | CA-19 (prova) | `003-prod-ca19-resultado.png` | toast "Empréstimo registrado…"; se perder o toast, repita (limpeza 5.2 do `evidencias-producao.md` e novo pedido) ou registre o card "Está com você" como resultado | 09/11/2026 | Produção (Vercel), conta de teste |
+| 5 | CA-21 | `003-prod-meus.png` | "1 de 3 itens em seu nome · prazo padrão de 14 dias", uma linha "Em dia", sem botão "Devolver" | 09/11/2026 | Produção (Vercel), conta de teste |
+| 6 | CA-24 | (texto) | resultado das consultas, colado em `docs/specs/003-solicitar-emprestimo/evidencias-producao.md` (passos 4 a 6) | 09/11/2026 | Produção (SQL Editor), texto no `evidencias-producao.md` |
 
 ## Local (back e front locais; banco local; cenários de `cenarios-locais.sql`)
 | # | CA | Cenário | Arquivo | O que precisa estar visível | Data |
