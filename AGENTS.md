@@ -1,11 +1,11 @@
 # EMPREST.AI
 
-Sistema de emprestimo de equipamentos internos de TI (notebooks, monitores, cabos, cameras) que substitui a planilha compartilhada: colaborador ve o catalogo, pede um item e devolve; Operacoes cadastra equipamento e controla quem esta com o que. Negocio em docs/PRD.md. Stack decidida em docs/adr/001-stack.md; design system em docs/adr/003-design-system.md (status: Proposto).
+Sistema de emprestimo de equipamentos internos de TI (notebooks, monitores, cabos, cameras) que substitui a planilha compartilhada: colaborador ve o catalogo, pede um item e devolve; Operacoes cadastra equipamento e controla quem esta com o que. Negocio em docs/PRD.md. Stack decidida em docs/adr/001-stack.md; design system em docs/adr/003-design-system.md (status: Aceito).
 
 ## Onde olhar
 
 - docs/PRD.md — o que o negocio precisa. Nao e spec.
-- docs/adr/ — decisoes tecnicas ja tomadas e o motivo delas: 001-stack (aceito) e 003-design-system (proposto). O numero 002 esta reservado para a biblioteca de teste de componente.
+- docs/adr/ — decisoes tecnicas ja tomadas e o motivo delas: 001-stack (aceito) e 003-design-system (aceito em 63a264d). O numero 002 esta reservado para a biblioteca de teste de componente.
 - docs/modelagem-banco.md — modelagem do banco, aprovada em 2026-10-19; implementada em back/prisma/.
 - layout.md (raiz; ha copia em front/layout.md) — spec visual das telas.
 - docs/specs/<NNN-funcionalidade>/ — spec, plano e tarefas de cada feature. Existe 001-login; a proxima e 002-catalogo.
@@ -29,7 +29,7 @@ Os scripts abaixo existem nos package.json; este arquivo nao registra que algum 
   - Raiz (docs, rules, agents, supabase, AGENTS.md, layout.md): sem remote configurado.
   - front/: remote `origin` github.com/dediniragusaso/EmprestAI.
   - back/: remote `origin` github.com/dediniragusaso/EmprestAI--Back.
-  - A raiz ignora back/ no .gitignore; front/ ainda aparece como nao rastreado na raiz.
+  - A raiz ignora back/ no .gitignore; front/ esta registrado no indice da raiz como gitlink (commit 63a264d, modo 160000) e nao existe .gitmodules: a raiz nao guarda o conteudo dele.
 
 ## Precedencia
 
@@ -43,7 +43,7 @@ Se algo nao estiver escrito em lugar nenhum, pergunte — nao decida.
 - back/ (NestJS): config de ambiente validada com Zod, verificacao de JWT por JWKS, guard de auth, filtro Problem Details e os endpoints `GET /`, `GET /v1/health` e `GET /v1/me` (back/src). Jest configurado; ha um spec do verificador de JWT.
 - back/prisma/: schema (Tenant, User, Membership, Equipment, Loan, AuditLog), migration `init` com RLS `deny_all`, indices parciais e trigger de auditoria, e seed que cria so o tenant `suporte_ti`. O commit 9e151db registra a migration verificada com `migrate reset` no banco local.
 - Ainda nao existe: spec 002 em diante, endpoints de equipamento e de emprestimo, cliente gerado por orval, teste de componente (biblioteca nao decidida), E2E.
-- ADR 003 esta como Proposto: o design system ainda nao foi aceito pelo time.
+- ADR 003 esta como Aceito (commit 63a264d, 2026-11-09).
 
 ## Procedimentos
 
