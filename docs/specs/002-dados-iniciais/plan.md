@@ -18,10 +18,12 @@ Saída: respostas anotadas na seção "Fora de escopo / não decidido" da spec. 
 pergunta que trave código fica sem resposta.
 
 ## Etapa 1 — Dependência de teste (feita)
-Testcontainers como devDependency do `back`, versão fixa `12.0.4` (`testcontainers` e
-`@testcontainers/postgresql`): commit `761867f`. A 12.0.4 é a mais nova sem exigência de Node
->= 22.22. Verificação feita: 111 pacotes novos no lockfile, nenhum removido ou alterado;
-`npm run build` exit 0; `npm run test` 4 testes verdes.
+Testcontainers como devDependency do `back`, versão fixa (`testcontainers` e
+`@testcontainers/postgresql`). Instalada primeiro em `12.0.4` (commit `761867f`), mas a 12.0.4
+depende do `undici` 8, que exige Node >= 22.19 (`zlib.createZstdDecompress`), e a máquina tem
+22.13.1: o Jest quebrava ao importar o pacote. **Trocada para `12.0.1`** (a mais nova com
+`undici` 7, que roda no Node 22.13) no commit `aea2f9f`. Verificação: lockfile com 111 pacotes
+novos, nenhum removido ou alterado; `npm run build` exit 0; `npm test` verde.
 
 ## Etapa 2 — Migration (CA-10, CA-03)
 Objetivo: `equipment` ganha as colunas de imagem e o unique por tenant.

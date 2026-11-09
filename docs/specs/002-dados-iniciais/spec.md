@@ -150,8 +150,8 @@ provam a lógica de banco (equipamentos, créditos, idempotência, `status` pres
 zero empréstimos, guarda de produção, migration). O **Auth real** e o **Storage real** não são
 testados localmente: o Auth real é provado em produção pelo **login do professor**, e o Storage
 (abrir as URLs, `enviar` duas vezes) pela evidência de produção. `testcontainers` e
-`@testcontainers/postgresql` entram no `back` como devDependencies em versão fixa (commit
-`761867f`, versão `12.0.4`).
+`@testcontainers/postgresql` entram no `back` como devDependencies em versão fixa `12.0.1`
+(instaladas em `761867f` como 12.0.4 e trocadas em `aea2f9f`: ver "Dívida de processo").
 *Motivo:* o Postgres do Testcontainers não tem o schema `auth` nem a API admin do Auth; injetar o
 cliente permite provar a lógica sem depender de Auth, e a prova do que só o ambiente real tem fica
 em produção.
@@ -220,7 +220,7 @@ roda, e precisa de Docker) ou **produção** (evidência colada pelo operador em
   refletir isso depois; §9 não muda.
 - **Storage:** bucket público `imagens`, objetos `equipamentos/<patrimonio>.jpg`.
 - **npm scripts (`back/package.json`):** novo `db:dados-iniciais`; `db:seed` não muda.
-  devDependencies: `testcontainers` e `@testcontainers/postgresql`, `12.0.4`.
+  devDependencies: `testcontainers` e `@testcontainers/postgresql`, `12.0.1`.
 - **Envs (nomes):** `SEED_PROFESSOR_PASSWORD` (já no `.env.example`), `SEED_TESTE_EMAIL` e
   `SEED_TESTE_PASSWORD` (novos), `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` lidos pelo script,
   e `DADOS_INICIAIS_CONFIRMO_PRODUCAO` (Q13). Inventário em `rules/secrets.md`.
@@ -231,8 +231,18 @@ roda, e precisa de Docker) ou **produção** (evidência colada pelo operador em
   002 existe. A única mudança de código desta etapa é a dependência de teste (commit `761867f`).
 - Os CA marcados "teste local" precisam de **Docker** rodando (Testcontainers). Hoje o Docker
   Desktop está instalado mas parado nesta máquina. O Supabase CLI deixou de ser necessário.
-- `testcontainers` ficou em **12.0.4** e não na última (12.2.1): a partir da 12.1.0 o pacote exige
-  Node >= 22.22, e a máquina tem 22.13.1. Atualizar o Node permite subir a versão.
+- `testcontainers` ficou em **12.0.1** e não na última (12.2.1). A 12.1.0 em diante exige Node >=
+  22.22 e a 12.0.2 em diante traz o `undici` 8, que exige Node >= 22.19; a máquina tem 22.13.1.
+  Foi preciso descer até a 12.0.1 (o `undici` 7 roda no Node 22.13). Atualizar o Node permite
+  subir a versão. Erro registrado: a primeira escolha (12.0.4) só olhou o `engines` do pacote
+  principal e não o da dependência transitiva.
+- O `npm run build` (`tsc -p tsconfig.build.json`) **não compila `prisma/`** (o `tsconfig.json` só
+  inclui `src` e `api`): o código do script é tipado pelo `ts-node` e pelo `ts-jest` na execução.
+- O `migrate reset` local do `rules/checks.md` (passo 2) **não foi executado**: o Prisma recusa o
+  comando quando o invoca um agente de IA sem consentimento explícito do usuário para a ação
+  destrutiva. O `migrate dev --create-only` também falhou (`P4002`, FK de `public.users` para o
+  schema `auth`). O SQL da migration veio de `prisma migrate diff` e a prova de "aplica do zero"
+  é o teste do CA-10 (Postgres descartável).
 - Prova de produção do **Auth real** e do **Storage real** depende do operador (CA-02, CA-04,
   CA-05, CA-06).
 - As fotos finais estão em `back/.preparo-imagens/`, que o git ignora: o `enviar` só roda na
