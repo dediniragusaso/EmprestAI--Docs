@@ -20,6 +20,10 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 - Frase extra em rules/restrictions.md além do pedido (reportada por ele) | commit c45aa18
 - O agente criou a convenção do hook e, ao ser testada, barrava todo push por uma spec fora da prática; escopo corrigido | commit 3f39782
 - Num teste de `--posicao`, o `preparar` rodou sem `--pular` para TI-0011 e TI-0012 e escolheu foto sozinho, contra a instrução de não aplicar nenhuma; o agente notou na tabela do `validar` (ids 3480569 e 551287) e desfez com `--pular`. Sem commit: as fotos ficam em área ignorada pelo git (reportado pelo agente)
+- Na 002, o agente trocou por conta própria a versão do Testcontainers (12.0.4 → 12.0.1) ao descobrir que o Jest não carregava o pacote no Node 22.13; a primeira escolha olhou só o `engines` do pacote principal e não o da dependência transitiva (`undici`) (reportado pelo agente) | commits 761867f e aea2f9f (repo back)
+- Na 002, o agente gerou o SQL da migration por `prisma migrate diff` em vez de `migrate dev --create-only`, que a `rules/migration.md` manda usar e que falhou com `P4002` (reportado pelo agente) | commit 399517d (repo back)
+- Na 002, o agente divergiu do plano em dois pontos sem pedir: deixou `DADOS_INICIAIS_CONFIRMO_PRODUCAO` só comentada no `.env.example` e entregou T6 e T7 num commit único (reportado pelo agente) | commits 9e0d17f e 17254e0 (repo back)
+- Na 002, o agente editou `docs/specs/001-login/spec.md` (uma linha da renumeração), arquivo que a lista da spec 002 não previa (reportado pelo agente) | commit bc93f86
 
 ## Seção 3 · Candidata a ADR
 - Mecanismo para tornar o verificador obrigatório: hook do harness, git hook ou CI (alternativas e limitações levantadas pelo agente). Decidir se virou ADR.
@@ -38,19 +42,35 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 - Ferramentas: Read, Grep, Glob, Bash; sem Edit nem Write | commit fc42860
 - Limitação: o Bash não restringe escrita; a barreira de ambiente cobre só o que está em permissions.deny | commit 221a8dd
 - Três repositórios: um intervalo de commits por repo | commit fc42860
+- Na 002 foram três rodadas, todas salvas e commitadas sem sobrescrever (`verificacao-rodada-1.md` a `-3.md`) | commits f2dde1d, 5815318 e 2163aea
+- O verificador rodou `npm test` de verdade (Testcontainers com Docker) e `npm run build`, só leu e rodou, e ele mesmo salvou o arquivo da rodada; não foi avisado do erro plantado | docs/specs/002-dados-iniciais/verificacao-rodada-2.md
+- Limitação: o critério do veredito por CA não está fixado no `.claude/agents/verificador-spec.md`. Para os mesmos CA ("prova local atendida, produção pendente") a rodada 1 escreveu "ATENDIDO (local); produção pendente" e a 2 escreveu "SEM TESTE"; foi preciso pedir o mesmo critério na rodada 3 | commits f2dde1d, 5815318 e 2163aea
+- Limitação: o portão da spec depende de ação humana. Com prova de produção prevista em CA, o verificador não declara PRONTA enquanto o operador não preencher `evidencias-producao.md`; três rodadas deram `NÃO PRONTA` pelo mesmo motivo | docs/specs/002-dados-iniciais/verificacao-rodada-3.md
 
 ## Seção 6 · Verificador em ação
 - Rodada 1 da 001-login: NÃO PRONTA (CA-01 a CA-10 sem teste) | commit af6d2e7 | docs/specs/001-login/verificacao-rodada-1.md
-- Prova com erro plantado: a fazer na spec 002.
+- 002-dados-iniciais, rodada 1: `NÃO PRONTA`. CA reprovado ou sem prova: CA-06 (sem prova) e a parte de produção de CA-01, CA-02, CA-04, CA-05 e CA-07. Causa: prova que só o operador produz (a spec exige evidência de produção para esses CA). Correção: nenhuma possível ao agente; entregue o modelo `evidencias-producao.md` | commit f2dde1d | docs/specs/002-dados-iniciais/verificacao-rodada-1.md
+- 002-dados-iniciais, rodada 2: `NÃO PRONTA`. **CA-13 REPROVADO**: o teste falhou na execução (esperado `EMPRESTADO`, recebido `DISPONIVEL`). Causa: o erro plantado, o `update` do upsert regravava o `status`. Correção: commit 52c13d2 | commit 5815318 | docs/specs/002-dados-iniciais/verificacao-rodada-2.md
+- 002-dados-iniciais, rodada 3: `NÃO PRONTA` só pela produção pendente; CA-13 voltou a atendido, 30 de 30 testes passam | commit 2163aea | docs/specs/002-dados-iniciais/verificacao-rodada-3.md
+- **Prova com erro plantado (spec 002):** plantado em `37b4b70` (repo back, mensagem "TESTE: erro plantado para provar o verificador"), reprovado pelo verificador no CA-13 na rodada 2, desfeito em `52c13d2` (mensagem "desfaz erro plantado"). O verificador não foi avisado do erro. Depois de desfeito voltou ao estado da rodada 1 (só produção pendente), e não a `PRONTA`, porque a prova de produção depende do operador | hashes 37b4b70 e 52c13d2 (repo back)
+- Tabela final (rodada 3): CA-03, CA-08, CA-09, CA-10, CA-11, CA-12, CA-13 e CA-14 ATENDIDO; CA-01, CA-02, CA-04, CA-05, CA-06 e CA-07 SEM TESTE (a parte local passa, falta a produção do operador, e o CA-06 só tem prova de produção) | docs/specs/002-dados-iniciais/verificacao-rodada-3.md | commit 2163aea
 
 ## Seção 7 · Regra posta à prova
 - restrictions.md permitia criar usuário no Auth remoto, em conflito com o enunciado | commit c45aa18
 - Paths antigos (frontend/, backend/) e globs de migration.md que deixaram de casar | commits 3a3e666, 7f63bb8
 - front/ registrado como gitlink na raiz (por 63a264d, sem .gitmodules) e removido do índice | commit cc59fe0
+- Na 002, `rules/migration.md` manda `prisma migrate dev --name <nome> --create-only`; contra o Supabase local falhou com `P4002` (FK de `public.users` para o schema `auth`), então a regra não se cumpre como está escrita | commit 399517d (repo back)
+- Na 002, `rules/checks.md` passo 2 manda `prisma migrate reset` no banco local; o Prisma recusa quando o invoca um agente de IA ("detected that it was invoked by Claude Code") e exige consentimento do usuário. A regra supõe um passo que o agente não pode fazer sozinho; a prova de "aplica do zero" passou a ser um teste em Postgres descartável | docs/specs/002-dados-iniciais/spec.md (Dívida de processo)
+- Na 002, o `permissions.deny` nega ao agente `prisma migrate deploy` mesmo contra um Postgres descartável, o que obrigou a aplicar as migrations do teste por `psql -f` dentro do contêiner (Q17) | commit aea2f9f (repo back)
+- Na 002, `rules/restrictions.md` ("o agente nunca escreve em produção") só vale se o script não alcançar o remoto por acidente: o `@prisma/client` carrega o `back/.env` na importação, antes do código do script. Foi preciso uma guarda que julga os valores efetivos, com teste que roda o script de verdade com destino remoto falso | commits a4188a6 e 36d9442 (repo back)
+- Na 002, `rules/checks.md` passo 3 manda rodar o build; o `npm run build` não compila `prisma/` (o `tsconfig.json` só inclui `src` e `api`), então o build não prova nada sobre o código do script: quem tipa são o `ts-node` e o `ts-jest` | docs/specs/002-dados-iniciais/spec.md (Dívida de processo)
+- Na 002, `rules/tests.md` diz que "nenhum runner existe hoje" e trata a matriz do ADR-001 §8 como pendente; o Testcontainers do ADR só rodou depois de descer para a 12.0.1 por causa da versão do Node da máquina | commit aea2f9f (repo back)
+- Na 002, `rules/secrets.md` e `rules/spec-flow.md` foram exercitadas sem falha: os três lugares da variável nova (o painel da Vercel não muda, os scripts não rodam lá) e a marca `Status: EM ABERTO`, sem `PRONTA` por conta própria; o hook de push passou nos 18 casos | commits e651ad3 e 2163aea
 
 ## Seção 8 · Ficou de fora
 - 001-login em aberto como dívida | commit 4f9a30b
 - Front sem runner de teste; ADR 002 inexistente
+- Spec 002-dados-iniciais não está PRONTA: faltam migrate deploy, `enviar` ×2, `db:dados-iniciais` ×2 e o login do professor em produção, com a evidência colada em `evidencias-producao.md` (a spec fica `Status: EM ABERTO`) | docs/handoffs/2026-11-09-002-dados-iniciais.md | commit 2163aea
 - Imagens: as 12 fotos existem; TI-0003, TI-0004, TI-0011 e TI-0012 esperam a revisão do operador | commits af52930 e 3dacb59 (repo back); handoff 96cdc70
 - Limitação das fotos de webcam e câmera compacta: são aproximações do tipo de equipamento. TI-0011 (Webcam Full HD) usa uma câmera de videoconferência (1163880) e TI-0012 (Câmera compacta) usa uma câmera de ação (8670926), porque o Pixabay não ofereceu, entre 30 candidatas por equipamento, foto de webcam de mesa ou de compacta convencional sem marca ou texto legível (a webcam 1219748 tem "1.3 MEGA PIXELS" na lente; as compactas trazem marca ou legendas de botões) | commit af52930 (repo back, opções `--escolher` e `--posicao`)
 - Limitação do `enviar`: o teste de "repetir não duplica" não foi feito antes (Docker parado e Supabase CLI ausente, sem ambiente local); será feito no envio real, pelo operador. Até lá a idempotência é só de desenho (upsert em caminho fixo e listagem de conferência no fim), não comprovada | commit a883bf4 (repo back)
