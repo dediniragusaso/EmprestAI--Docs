@@ -25,6 +25,14 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 - Na 002, o agente divergiu do plano em dois pontos sem pedir: deixou `DADOS_INICIAIS_CONFIRMO_PRODUCAO` só comentada no `.env.example` e entregou T6 e T7 num commit único (reportado pelo agente) | commits 9e0d17f e 17254e0 (repo back)
 - Na 002, o agente editou `docs/specs/001-login/spec.md` (uma linha da renumeração), arquivo que a lista da spec 002 não previa (reportado pelo agente) | commit bc93f86
 
+- Na 003, o agente acrescentou `openedOn` (data civil de Brasília da retirada) ao contrato de `GET /v1/loans/mine`, que a spec não previa, para a tela não converter fuso no navegador (reportado pelo agente) | commit 49900af (repo back)
+- Na 003, o agente tornou `AuthModule` global e criou `ClockModule` para montar o app de teste à mão, porque `@nestjs/testing` não está aprovado; o operador só autorizou o `supertest` (reportado pelo agente) | commit 7833375 (repo back)
+- Na 003, `DATABASE_URL` virou obrigatória no boot do back (ADR-001 §9); o deploy da Vercel do back precisa ter a variável antes do próximo push, e o agente não consegue conferir (reportado pelo agente) | commit d68291a (repo back)
+- Na 003, o primeiro teste de concorrência do CA-10 reutilizava as mesmas 10 pessoas nas 20 repetições e falhou pelo limite de 3: erro do teste, não do código; corrigido criando pessoas novas a cada repetição (reportado pelo agente) | commit 5219a89 (repo back)
+- Na 003, o agente escreveu um `!` em `front/src/lib/api.ts`, que `rules/qualidade-codigo.md` proíbe, e o corrigiu antes da verificação (reportado pelo agente) | commit 3e11337 (repo front)
+- Na 003, no AGENTS.md o agente afirmou sem verificar que não havia deploy ligado à raiz; removeu a frase no commit seguinte (reportado pelo agente) | commits 877dd87 e 0e4a63f
+- Na 003, o agente implementou com a spec `EM ABERTO` depois de duas rodadas `NÃO PRONTA` por falta de código; o operador decidiu em 09/11/2026 que isso não é desvio | commits 1600998 e 862e66f
+
 ## Seção 3 · Candidata a ADR
 - Mecanismo para tornar o verificador obrigatório: hook do harness, git hook ou CI (alternativas e limitações levantadas pelo agente). Decidir se virou ADR.
 - ADR da biblioteca de imagem (Pixabay não entrega 800x600): escrito pelo time, docs/adr/004-biblioteca-de-imagem.md | commit 3593277
@@ -59,6 +67,10 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 - 002-dados-iniciais, rodada 6: **`PRONTA`**. O operador colou as saídas reais de produção (12 URLs com 800x600; `imagens:enviar` e `db:dados-iniciais` duas vezes; SQL após as repetições). `Status: PRONTA` marcado depois do veredito | commits 1a3fd14 (relatório) e 165f19b (status) | docs/specs/002-dados-iniciais/verificacao-rodada-6.md
 - Evidências de produção registradas em `evidencias-producao.md`: 4902cc2, e3c4e19, 0e6049b e 45f2d3b. Ressalvas do verificador, que não mudam o veredito: a origem das saídas coladas não é autenticável pelo agente; a 1ª população (12 criados) é só declaração do operador (as duas execuções registradas deram 0 criados, 12 atualizados); o CA-06 prova o `GET /v1/me` de forma indireta, pelo e-mail no print
 
+- 003-solicitar-emprestimo, rodada 1: `NÃO PRONTA`; só spec, plano e tarefas, os 26 CA SEM TESTE por falta de código; achou 7 lacunas na própria spec (contagem "X de Y", CA-16 sem caso no POST, referências antigas, busca do CA-24, dependências das Q, ator da auditoria, rótulo do CA-16) | commit d0e7ed9 | docs/specs/003-solicitar-emprestimo/verificacao-rodada-1.md
+- 003-solicitar-emprestimo, rodada 2: `NÃO PRONTA`; as 7 lacunas corrigidas, spec/plano/tarefas coerentes, ainda sem código | commit 1600998 | docs/specs/003-solicitar-emprestimo/verificacao-rodada-2.md
+- 003-solicitar-emprestimo, rodada 3 em diante: veredito e hash ficam no próprio `verificacao-rodada-<N>.md` da pasta da spec; esta nota não repete o veredito para não invalidar a evidência (qualquer commit na raiz depois da rodada a invalida) | docs/specs/003-solicitar-emprestimo/
+
 ## Seção 7 · Regra posta à prova
 - restrictions.md permitia criar usuário no Auth remoto, em conflito com o enunciado | commit c45aa18
 - Paths antigos (frontend/, backend/) e globs de migration.md que deixaram de casar | commits 3a3e666, 7f63bb8
@@ -71,11 +83,22 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 - Na 002, `rules/tests.md` diz que "nenhum runner existe hoje" e trata a matriz do ADR-001 §8 como pendente; o Testcontainers do ADR só rodou depois de descer para a 12.0.1 por causa da versão do Node da máquina | commit aea2f9f (repo back)
 - Na 002, `rules/secrets.md` e `rules/spec-flow.md` foram exercitadas sem falha: os três lugares da variável nova (o painel da Vercel não muda, os scripts não rodam lá) e a marca `Status: EM ABERTO`, sem `PRONTA` por conta própria; o hook de push passou nos 18 casos | commits e651ad3 e 2163aea
 
+- Na 003, `rules/spec-flow.md` ("Antes de declarar uma spec pronta") só aceita `PRONTA` com a implementação verificada; o pedido de implementar "se a spec ficar PRONTA" é circular: a spec sem código só alcança `NÃO PRONTA` (rodadas 1 e 2). O operador resolveu aprovando a implementação com a spec `EM ABERTO` | commits d0e7ed9 e 1600998
+- Na 003, o hook `exige-verificacao.mjs` passou a barrar todo `git push` feito pelo harness (ex.: "spec 002-dados-iniciais marcada PRONTA sem evidência válida: HEAD de front mudou") assim que o `front/` e o `back/` ganharam commits da 003, porque a evidência da 002 guarda os HEADs dos três repositórios. Qualquer fatia nova invalida a evidência das anteriores; pushes pelo terminal do operador não passam pelo hook | comando conferido em 09/11/2026 sobre HEAD 3e11337 (front)
+- Na 003, `rules/tests.md` e `rules/qualidade-codigo.md` citavam "Tarefa 9 da 003", "Q4 da 003 … Tarefa 12" e `MeusEmprestimos.tsx` de uma numeração e de um protótipo que não existiam na fatia real; foram acertadas | commit 59544cf
+- Na 003, `rules/restrictions.md` ("não escolha biblioteca fora do ADR-001") obrigou a montar o app de teste sem `@nestjs/testing`; funcionou, mas custou um helper próprio | commit 7833375 (repo back)
+- Na 003, `rules/checks.md` passo 2 (reset de migration) não se aplicou: a fatia não tem migration; `rules/checks.md` passo 3 (build) não compila `src/testing` por escolha do `tsconfig.build.json`, então o helper de teste só é tipado pelo `ts-jest` | commit 7833375 (repo back)
+- Na 003, o teste de concorrência provou a regra de verdade: os 4 casos (CA-10, CA-11 duas vezes e CA-12) falharam antes do lock e passaram depois | commit 5219a89 (repo back)
+
 ## Seção 8 · Ficou de fora
 - 001-login em aberto como dívida | commit 4f9a30b
 - Front sem runner de teste; ADR 002 inexistente
-- Spec 002-dados-iniciais não está PRONTA: faltam migrate deploy, `enviar` ×2, `db:dados-iniciais` ×2 e o login do professor em produção, com a evidência colada em `evidencias-producao.md` (a spec fica `Status: EM ABERTO`) | docs/handoffs/2026-11-09-002-dados-iniciais.md | commit 2163aea
+- Spec 002-dados-iniciais: `PRONTA` desde a rodada 6 (relatório 1a3fd14, status 165f19b). As saídas de produção das seções 3 e 4 do `evidencias-producao.md` foram coladas pelo operador, mas a 1ª população (12 criados) é só declaração; o verificador não consegue autenticar a origem das saídas coladas
 - Imagens: as 12 fotos existem; TI-0003, TI-0004, TI-0011 e TI-0012 esperam a revisão do operador | commits af52930 e 3dacb59 (repo back); handoff 96cdc70
 - Limitação das fotos de webcam e câmera compacta: são aproximações do tipo de equipamento. TI-0011 (Webcam Full HD) usa uma câmera de videoconferência (1163880) e TI-0012 (Câmera compacta) usa uma câmera de ação (8670926), porque o Pixabay não ofereceu, entre 30 candidatas por equipamento, foto de webcam de mesa ou de compacta convencional sem marca ou texto legível (a webcam 1219748 tem "1.3 MEGA PIXELS" na lente; as compactas trazem marca ou legendas de botões) | commit af52930 (repo back, opções `--escolher` e `--posicao`)
 - Limitação do `enviar`: o teste de "repetir não duplica" não foi feito antes (Docker parado e Supabase CLI ausente, sem ambiente local); será feito no envio real, pelo operador. Até lá a idempotência é só de desenho (upsert em caminho fixo e listagem de conferência no fim), não comprovada | commit a883bf4 (repo back)
 - Limitações do hook (evidência forjável; só vale no harness; trabalho não commitado não é conferido)
+- Spec 003-solicitar-emprestimo: back e front implementados (T5 a T15, T17 e T18). **Falta**: os prints de tela (CA-02, CA-04, CA-19 a CA-23), porque o agente não tem navegador nem instala Playwright, e a prova de produção com a conta de teste, que são do operador (`docs/evidencias/003-indice.md` e `docs/specs/003-solicitar-emprestimo/evidencias-producao.md`) | commits 732f81b e 65ba3cc
+- Dívida da 003 (spec, "Dívida de processo"): cliente HTTP à mão e Zod direto no Nest em vez de orval e `nestjs-zod` (Q5); front sem teste automatizado (ADR 002 reservado); `lint` não existe no back nem no front
+- 003: devolução (PRD item 4), renovação, tela de Operações (item 5), "A vencer" e etiqueta de papel ficam para outras fatias; sem devolução, o item pedido em produção só volta a `DISPONIVEL` pelo SQL de limpeza que o operador executa
+- 003: o `npm install` do `supertest` mostrou avisos de `npm audit` que não foram avaliados; o lockfile também subiu `qs` 6.16.1 → 6.17.1 | commit ce107cf (repo back)
