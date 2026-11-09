@@ -5,10 +5,9 @@ Postgres real) e §9 (env validado), por ADR-004 (sharp só em script de preparo
 `docs/modelagem-banco.md` §4.4 e §9 (o §9 não muda), e por `rules/migration.md`,
 `rules/secrets.md`, `rules/restrictions.md` ("Produção") e `rules/tests.md`.
 
-**Nada abaixo começa antes de o operador aprovar a spec.** As perguntas abertas que travam uma
-tarefa específica são: Q16 (T4, tenant ausente), Q13 (T5 e T8, variável de confirmação), Q8 (T6,
-sem senha), Q4 (T7, papel da conta de teste) e Q17 (T10, migrations no contêiner). As demais não
-travam código. Todo comando do agente roda
+O operador aprovou a spec e as propostas conservadoras das perguntas abertas (Q3, Q4, Q5, Q7,
+Q8, Q9, Q10, Q12, Q13, Q15, Q16 e Q17); as respostas adotadas estão na seção "Fora de escopo /
+não decidido" da spec e orientam as etapas abaixo. Todo comando do agente roda
 contra Postgres descartável (Testcontainers) ou banco local, com `DATABASE_URL`, `DIRECT_URL`,
 `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` definidos no próprio comando; o ambiente do processo
 vence o `back/.env`, que aponta para o remoto.
@@ -53,16 +52,16 @@ Objetivo: gravar os 12 itens com créditos e `imageUrl`, repetível.
   com `SUPABASE_URL` sem barra final.
 - Upsert por `tenantId_patrimonio`. **`create`:** todos os campos, inclusive `status`. **`update`:**
   só `name`, `category` e os cinco campos de imagem; `status` fica de fora (R5, CA-13).
-- Tenant ausente: comportamento em Q16 (proposta: falha com mensagem dizendo para rodar
-  `db:seed` antes).
+- Tenant ausente (Q16, decidido): o script **exige** o tenant e falha com mensagem dizendo para
+  rodar `db:seed` antes; não cria o tenant.
 - Verificação: duas execuções contra Postgres descartável, contagens iguais; teste muda o
   `status` de um item para `EMPRESTADO` e confere que a segunda execução o preserva.
 
 ## Etapa 4 — Guarda de produção (CA-09)
 Objetivo: o script nunca escreve no remoto por acidente (R8).
 - Antes de qualquer escrita, olha o host de `DATABASE_URL` e o de `SUPABASE_URL`; se algum não for
-  `127.0.0.1` ou `localhost`, exige a confirmação de produção (nome em Q13) e imprime só o host,
-  nunca a URL completa. O Postgres do Testcontainers é `localhost`, então os testes passam pela
+  `127.0.0.1` ou `localhost`, exige `DADOS_INICIAIS_CONFIRMO_PRODUCAO=sim` (Q13, decidido) e
+  imprime só o host, nunca a URL completa. O Postgres do Testcontainers é `localhost`, então os testes passam pela
   guarda sem desligá-la.
 - O agente nunca define a variável de confirmação. Verificação: execução com host remoto falso e
   chaves falsas sai com erro sem tocar em banco.
@@ -92,15 +91,15 @@ Objetivo: cada CA "teste local" tem caso com o `CA-xx` no nome (rules/tests.md).
 - O `back/package.json` hoje tem `rootDir: src` e `testRegex .*\.spec\.ts`; testar `prisma/`
   exige mudar a configuração do Jest (por exemplo `roots`), e a mudança é mostrada antes de
   aplicada.
-- Como aplicar as migrations no contêiner: Q17. Proposta conservadora: copiar os `migration.sql`
-  para o contêiner e executá-los em ordem com `psql -f` por `container.exec`, sem dependência
-  nova e sem usar o comando que o harness nega.
+- Como aplicar as migrations no contêiner (Q17, decidido): copiar os `migration.sql` para o
+  contêiner e executá-los em ordem com `psql -f` por `container.exec`, sem dependência nova e sem
+  usar o comando que o harness nega.
 - Verificação: `cd back && npm run test` com a última linha colada. Precisa de Docker rodando.
   CA sem teste é dito em voz alta (CA-06 só em produção; CA-02 e CA-04 só em parte).
 
 ## Etapa 7 — Envs e segredos (CA-08)
-- `back/.env.example`: acrescentar `SEED_TESTE_EMAIL`, `SEED_TESTE_PASSWORD` e a variável de
-  confirmação do script (Q13), sem valor. `rules/secrets.md`: inventário com os nomes novos e quem
+- `back/.env.example`: acrescentar `SEED_TESTE_EMAIL`, `SEED_TESTE_PASSWORD` e
+  `DADOS_INICIAIS_CONFIRMO_PRODUCAO` (Q13), sem valor. `rules/secrets.md`: inventário com os nomes novos e quem
   lê cada um. Os três lugares da regra: `.env` local, `.env.example`, painel da Vercel; os scripts
   não rodam na Vercel, então o painel não muda, e isso é dito na resposta.
 - Teste do CA-08: verificação sobre `git ls-files` e busca de padrões nos três repositórios.

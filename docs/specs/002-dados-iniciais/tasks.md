@@ -1,10 +1,11 @@
 # Tarefas — 002-dados-iniciais
 `[ ]` pendente, `[x]` feito com a evidência. Uma tarefa por vez; cada uma cabe num commit no
-repositório indicado. Nenhuma começa antes de o operador aprovar a spec e decidir as perguntas
-que travam código.
+repositório indicado. Spec aprovada e perguntas decididas pelo operador (T0).
 
-- [ ] T0 Aprovar a spec e decidir as perguntas abertas (Q3, Q4, Q5, Q7, Q8, Q9, Q10, Q12, Q13, Q15,
-  Q16, Q17). Sem código. (bloqueia CA-01 a CA-14)
+- [x] T0 Aprovar a spec e decidir as perguntas abertas (Q3, Q4, Q5, Q7, Q8, Q9, Q10, Q12, Q13, Q15,
+  Q16, Q17). Sem código. (bloqueia CA-01 a CA-14) Evidência: o operador aprovou as propostas
+  conservadoras em 2026-11-09; respostas na spec ("Fora de escopo / não decidido"); commit desta
+  tarefa (primeiro commit de `docs/specs/002-dados-iniciais/` após `c2ff42a`).
 - [x] T1 Instalar `testcontainers` e `@testcontainers/postgresql` `12.0.4` como devDependencies
   (CA-10, CA-01) — repo back. Evidência: commit `761867f`; 111 pacotes novos, nenhum removido ou
   alterado; `npm run build` exit 0; `npm run test` 4 testes verdes.

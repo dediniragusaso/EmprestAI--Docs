@@ -1,6 +1,6 @@
 # 002 — Dados iniciais
 
-Status: EM ABERTO (decisões do operador incorporadas; aguardando aprovação; nenhum código da 002 escrito)
+Status: EM ABERTO
 
 ## Objetivo
 Deixar o banco e o Storage com os dados de partida do EMPREST.AI: os 12 equipamentos do
@@ -26,7 +26,7 @@ tela nem endpoint novo nesta fatia.
   rules/secrets.md, rules/spec-flow.md, rules/tests.md.
 - **Renumeração.** Esta spec é a **002** (dados iniciais). A fatia que o PRD e o `AGENTS.md`
   chamavam de `002-catalogo` (catálogo e pedido de empréstimo) passa a ser a **003**. O nome da
-  pasta da 003 não foi definido (proposta: `003-catalogo`; Q7). Referências que ainda dizem
+  pasta da 003 é `003-catalogo` (decidido, Q7). Referências que ainda dizem
   "002-catalogo" ou "002" no sentido de catálogo: `AGENTS.md` (linhas sobre a próxima spec),
   `rules/spec-flow.md` (exemplo de numeração), `rules/tests.md` ("Tarefa 9 da 002", "Q4 da
   002"), `rules/qualidade-codigo.md` ("Tarefa 15 da fatia 002"), `docs/entrega-notas.md` e o
@@ -119,11 +119,11 @@ de dados iniciais contra o Supabase remoto (rules/restrictions.md, "Produção")
 e descreve; o operador roda, na ordem:
 1. `cd back && npx prisma migrate deploy` (com a `DIRECT_URL` do remoto no ambiente do operador);
 2. `npm run db:seed` (só cria o tenant `suporte_ti`, idempotente; necessário se o tenant ainda não
-   existir no remoto, ver Q16);
+   existir no remoto, porque o script de dados iniciais **exige** o tenant e falha se faltar, Q16);
 3. `npm run imagens:enviar`, **duas vezes** (com `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` e
    `ENVIAR_CONFIRMO_PRODUCAO=sim` no terminal dele);
-4. `npm run db:dados-iniciais`, **duas vezes** (com as variáveis do remoto no ambiente dele e a
-   confirmação de produção do script, Q13).
+4. `npm run db:dados-iniciais`, **duas vezes** (com as variáveis do remoto no ambiente dele e
+   `DADOS_INICIAIS_CONFIRMO_PRODUCAO=sim`, Q13).
 A ordem importa: a migration cria as colunas, o seed cria o tenant, o `enviar` cria o bucket e
 sobe as fotos, o script grava as URLs e o usuário. Cada passo repetido prova a idempotência em
 produção. O operador cola contagens e saídas (sem valores de segredo) em
@@ -136,7 +136,7 @@ interface e importação da planilha. Ver a seção "Fora de escopo".
 **R8 — O script local nunca escreve no remoto por acidente.** O `back/.env` aponta para o Supabase
 remoto, e o cliente Prisma o carrega sozinho. Por isso o script de dados iniciais recusa host que
 não seja local sem uma confirmação explícita, como já faz o `enviar`
-(`ENVIAR_CONFIRMO_PRODUCAO=sim`). O nome da variável fica em Q13 (CA-09).
+(`ENVIAR_CONFIRMO_PRODUCAO=sim`). A variável é `DADOS_INICIAIS_CONFIRMO_PRODUCAO=sim` (Q13, CA-09).
 *Motivo:* sem isso, rodar o script "de teste" na máquina escreveria em produção.
 
 **R9 — O seed existente não muda.** `back/prisma/seed.ts` continua exatamente como está (cria só
@@ -223,7 +223,7 @@ roda, e precisa de Docker) ou **produção** (evidência colada pelo operador em
   devDependencies: `testcontainers` e `@testcontainers/postgresql`, `12.0.4`.
 - **Envs (nomes):** `SEED_PROFESSOR_PASSWORD` (já no `.env.example`), `SEED_TESTE_EMAIL` e
   `SEED_TESTE_PASSWORD` (novos), `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` lidos pelo script,
-  e a variável de confirmação de produção (Q13). Inventário em `rules/secrets.md`.
+  e `DADOS_INICIAIS_CONFIRMO_PRODUCAO` (Q13). Inventário em `rules/secrets.md`.
 - **HTTP:** nenhum endpoint novo ou alterado; sem mudança de OpenAPI.
 
 ## Dívida de processo
@@ -249,25 +249,32 @@ Decididas pelo operador e já incorporadas acima: C1, C2, C3, Q1 (atualiza nome,
 imagem, nunca o status), Q2 (unique por tenant), Q6 (Jest e Testcontainers com Auth simulado) e
 Q14 ("senha no arquivo" é o `back/.env`).
 
-Ainda não decidido — o PRD e o briefing não respondem, e nada foi preenchido com suposição:
-- **Q3 — Nome do usuário obrigatório.** `public.users.name` vem de `raw_user_meta_data->>'name'`
-  e, se faltar, do e-mail (migration `init`). Que nome vai nos metadados do Auth?
-- **Q4 — Papel da conta de teste.** O briefing diz "mesma lógica", o que sugere `COLABORADOR`.
-- **Q5 — Observação dos itens em manutenção.** A lista não traz motivo nem previsão de retorno
-  para TI-0004, TI-0007 e TI-0010; `observacao` fica vazia.
-- **Q7 — Nome da pasta da 003.** Proposta `003-catalogo`.
-- **Q8 — Sem `SEED_PROFESSOR_PASSWORD`.** O script falha antes de tocar no Auth ou pula o usuário?
-- **Q9 — Imagem e crédito na tela.** O `layout.md` não define foto de equipamento nem onde
-  creditar o autor.
-- **Q10 — Convite de administrador.** Como se cria a próxima conta (ADR-001 §7, pergunta 7 da
-  modelagem) está fora desta fatia.
-- **Q12 — Troca de senha.** O script não altera a senha de usuário que já existe (R4).
-- **Q13 — Nome da variável de confirmação de produção do script.**
-- **Q15 — "Limite 5" e "14 dias úteis".** Divergem do PRD (3 itens; 14 dias); seguem para a 003.
-- **Q16 — Tenant ausente.** O script cria o tenant `suporte_ti` se faltar, ou exige que o
-  `db:seed` já o tenha criado?
-- **Q17 — Como aplicar as migrations no container de teste.** O `permissions.deny` do projeto
-  nega ao agente `prisma migrate deploy`, mesmo contra um Postgres descartável.
+**Decididas pelo operador em 2026-11-09: aprovou as propostas conservadoras** de Q3, Q4, Q5, Q7,
+Q8, Q9, Q10, Q12, Q13, Q15, Q16 e Q17. Resposta adotada em cada uma:
+- **Q3 — Nome do usuário obrigatório.** O script **não envia `name`** nos metadados do Auth; o
+  `public.users.name` fica com o e-mail (fallback do trigger da migration `init`).
+- **Q4 — Papel da conta de teste.** `COLABORADOR`, a mesma lógica da conta do professor.
+- **Q5 — Observação dos itens em manutenção.** `observacao` fica vazia para TI-0004, TI-0007 e
+  TI-0010 (a lista não traz motivo nem previsão).
+- **Q7 — Nome da pasta da 003.** `003-catalogo`.
+- **Q8 — Sem `SEED_PROFESSOR_PASSWORD`.** O script **falha antes de tocar no Auth**, com mensagem
+  que cita o nome da variável (nunca o valor). Não pula o usuário em silêncio.
+- **Q9 — Imagem e crédito na tela.** Nada é implementado na 002; o `layout.md` segue sem definir
+  foto nem crédito. O `creditos.json` e as colunas guardam o que a 003 vai precisar.
+- **Q10 — Convite de administrador.** Fora da 002; segue não decidido.
+- **Q12 — Troca de senha.** O script **não altera** a senha de usuário que já existe.
+- **Q13 — Variável de confirmação de produção.** `DADOS_INICIAIS_CONFIRMO_PRODUCAO=sim`, no
+  padrão do `ENVIAR_CONFIRMO_PRODUCAO`. O agente nunca a define.
+- **Q15 — "Limite 5" e "14 dias úteis".** Divergem do PRD (3 itens; 14 dias); **seguem para a
+  003**, fora desta fatia.
+- **Q16 — Tenant ausente.** O script **exige que o tenant `suporte_ti` já exista** e, se faltar,
+  falha com mensagem dizendo para rodar `db:seed` antes. Não duplica a criação do tenant.
+- **Q17 — Migrations no contêiner de teste.** Copiar os `migration.sql` para o contêiner e
+  executá-los em ordem com `psql -f` por `container.exec`: sem dependência nova e sem usar o
+  comando que o `permissions.deny` nega ao agente.
+
+Ainda não decidido: nada que trave código. Fica sem decisão só o que está declarado "fora de
+escopo" ou "segue para a 003" (Q9, Q10, Q15).
 
 ## Como sei que funcionou
 Com o Docker ativo: `cd back && npm run test` roda os casos dos CA "teste local" contra Postgres
