@@ -1,6 +1,6 @@
 ---
 description: Onde cada variável de ambiente vive e qual chave usar
-globs: ["**/.env*", "frontend/src/lib/**", "backend/src/config/**"]
+globs: ["**/.env*", "front/src/lib/**", "back/src/config/**"]
 alwaysApply: false
 ---
 
@@ -12,17 +12,38 @@ Ao criar ou usar qualquer variável de ambiente, ao instanciar o client
 do Supabase ou o client da API, ou ao escrever código que lê
 configuração.
 
-## Inventário atual (de ARQUITETURA.md)
+## Inventário atual
+Conferido em `back/.env.example`, `front/.env.example` e
+`back/src/config/env.ts`. O `.env.example` de cada repositório é a lista
+versionada de nomes; este quadro é o mapa de quem lê o quê.
 
 | Arquivo | Variável | Natureza |
 |---|---|---|
-| `backend/.env` | `SUPABASE_URL` | público |
-| `backend/.env` | `SUPABASE_SERVICE_ROLE_KEY` | **secreto** |
-| `backend/.env` | `DATABASE_URL` | secreto (pooler) |
-| `backend/.env` | `DIRECT_DATABASE_URL` | secreto (migrations) |
-| `frontend/.env` | `VITE_SUPABASE_URL` | público |
-| `frontend/.env` | `VITE_SUPABASE_ANON_KEY` | público |
-| `frontend/.env` | `VITE_API_URL` | público |
+| `back/.env` | `NODE_ENV`, `PORT` | configuração |
+| `back/.env` | `SUPABASE_URL` | público |
+| `back/.env` | `SUPABASE_JWKS_URL` | público |
+| `back/.env` | `CORS_ORIGIN` | público |
+| `back/.env` | `DATABASE_URL` | secreto (pooler) |
+| `back/.env` | `DIRECT_URL` | secreto (migrations) |
+| `back/.env` | `SUPABASE_SERVICE_ROLE_KEY` | **secreto** — nome novo, ainda ausente do `.env.example` |
+| `back/.env` | `PEXELS_API_KEY` | **secreto** — nome novo, ainda ausente do `.env.example` |
+| `back/.env` | `SEED_PROFESSOR_PASSWORD` | **secreto** — nome novo, ainda ausente do `.env.example` |
+| `front/.env` | `VITE_SUPABASE_URL` | público |
+| `front/.env` | `VITE_SUPABASE_ANON_KEY` | público |
+| `front/.env` | `VITE_API_URL` | público |
+
+Os três nomes novos entram no `.env.example` de `back/` só como nome, sem
+valor (passo 3 abaixo).
+
+Nenhum código lê o `.env` nem o `.env.example` da raiz, nem `back/.env.remote`.
+
+### Quem carrega o arquivo
+- Front: o Vite lê `front/.env` (sem `envDir` em `front/vite.config.ts`).
+- Prisma: a versão instalada é a 6.19.3 (`back/package.json`, sem
+  `prisma.config.ts`). Ela carrega `back/.env` sozinha nos comandos da CLI
+  (`migrate`, `db seed`). A 7 deixa de fazer isso: ao atualizar, reverifique.
+- API Nest: `back/src/config/env.ts` lê só `process.env` e não há `dotenv` no
+  projeto — o `.env` precisa chegar ao processo por fora (na Vercel, pelo painel).
 
 ## Procedimento
 1. Chave pública (anon): só ela pode aparecer em código que roda no
@@ -30,7 +51,7 @@ configuração.
    Neste projeto o front usa a anon key apenas para a sessão
    (supabase-js) — dados nunca vêm do Supabase direto no navegador.
 2. Chave de serviço (service_role): ignora todas as políticas. Só no
-   backend, nunca em código do `frontend/`, nunca em variável com
+   backend, nunca em código do `front/`, nunca em variável com
    prefixo `VITE_` — tudo com `VITE_` vai embutido no bundle e chega
    ao navegador.
 3. Variável nova existe em TRÊS lugares ou em nenhum:
@@ -45,7 +66,7 @@ configuração.
    sempre é manual).
 
 ## Verificação
-Uma busca por `SERVICE_ROLE` no `frontend/` não retorna nada, e nenhum
+Uma busca por `SERVICE_ROLE` no `front/` não retorna nada, e nenhum
 valor de chave aparece em arquivo versionado. `.env.example` de cada
 repositório tem todas as chaves que o projeto usa, sem nenhum valor real.
 

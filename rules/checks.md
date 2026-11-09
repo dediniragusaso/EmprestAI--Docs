@@ -13,8 +13,8 @@ Sempre que você for dizer "pronto", "implementado" ou "funcionando".
 ## Procedimento
 1. Rode testes, lint e typecheck nos dois repositórios tocados pela tarefa
    (e nos dois, sempre que a mudança atravessar o contrato):
-   - backend: `cd backend && npm run lint && npm run test`
-   - frontend: `cd frontend && npm run lint && npx tsc -b`
+   - back: `cd back && npm run lint && npm run test`
+   - front: `cd front && npm run lint && npx tsc -b`
    Cole a última linha de cada saída na resposta.
    Se algum script ainda não existir no `package.json` recém-scaffoldado,
    declare isso em vez de pular em silêncio.
@@ -25,14 +25,14 @@ Sempre que você for dizer "pronto", "implementado" ou "funcionando".
    `DATABASE_URL`/`DIRECT_DATABASE_URL` do ambiente remoto.
 3. Rode build antes de qualquer push — build que quebra na Vercel é o
    feedback mais lento e mais caro deste projeto:
-   `cd backend && npm run build && cd ../frontend && npm run build`
+   `cd back && npm run build && cd ../front && npm run build`
 4. Rode `git status --short`. Só podem aparecer arquivos do escopo da
    tarefa (`.env` nunca deve aparecer — está no `.gitignore`).
 5. Diga qual critério de aceitação esta tarefa atende, citando o item por
    número: o `CA-xx` do `spec.md` da funcionalidade em
    `docs/specs/<NNN-nome-curto>/` — que no Vínculo já aponta para o item
    1–5 do `docs/PRD.md` (seção "O que precisa existir na primeira versão")
-   ou para as regras 1–11 do `docs/layout.md` (seção 7). Tarefa que não
+   ou para as regras 1–11 do `layout.md` (seção 7). Tarefa que não
    atende a nenhum critério numerado deve dizer isso explicitamente.
 6. Gere o handoff datado desta implementação em
    `docs/handoffs/AAAA-MM-DD-<assunto-curto>.md` (`rules/handoff.md`) — também

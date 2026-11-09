@@ -8,8 +8,8 @@ alwaysApply: true
 > leitor: agente
 
 ## Quando
-Ao escrever ou alterar qualquer arquivo de código (`frontend/src/`,
-`backend/src/`). Vale para código novo e para código que você está movendo:
+Ao escrever ou alterar qualquer arquivo de código (`front/src/`,
+`back/src/`). Vale para código novo e para código que você está movendo:
 mover sem melhorar é permitido; melhorar fora do escopo da tarefa não é
 (`rules/restrictions.md`).
 

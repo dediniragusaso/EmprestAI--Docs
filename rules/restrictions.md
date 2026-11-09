@@ -21,12 +21,11 @@ alwaysApply: true
 - Não altere arquivo fora do escopo da tarefa atual (o `git status --short`
   do checks.md é quem confere isso).
 - Não gere scaffold automático de framework sem mostrar antes o que ele
-  vai criar. O `frontend/` já tem projeto (scaffold de `4abc059`) e o
-  `backend/` ainda não tem — o scaffold restante é uma decisão visível, não um efeito colateral.
+  vai criar: scaffold é uma decisão visível, não um efeito colateral.
 - Não escreva código de funcionalidade sem a spec da fatia: toda
   funcionalidade tem `docs/specs/<NNN-nome-curto>/` com `spec.md`,
   `plan.md` e `tasks.md` (`rules/spec-flow.md` explica o ciclo). O PRD
-  (comportamento de produto) e o `docs/layout.md` (comportamento visual)
+  (comportamento de produto) e o `layout.md` (comportamento visual)
   são a fonte da spec, não a spec — se a funcionalidade não estiver em
   nenhum dos três, pergunte, não deduza.
 
