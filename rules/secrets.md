@@ -27,7 +27,9 @@ versionada de nomes; este quadro é o mapa de quem lê o quê.
 | `back/.env` | `DIRECT_URL` | secreto (migrations) |
 | `back/.env` | `SUPABASE_SERVICE_ROLE_KEY` | **secreto** — lido por `back/scripts/imagens-equipamentos/enviar.mjs`, só no terminal do operador; nome no `.env.example` |
 | `back/.env` | `PIXABAY_API_KEY` | **secreto** — lido por `back/scripts/imagens-equipamentos/preparar.mjs` (`node --env-file`); nome no `.env.example`. Substitui `PEXELS_API_KEY` (ADR-004) |
-| `back/.env` | `SEED_PROFESSOR_PASSWORD` | **secreto** — nome no `.env.example` |
+| `back/.env` | `SEED_PROFESSOR_PASSWORD` | **secreto** — lido por `back/prisma/dados-iniciais.ts` (`npm run db:dados-iniciais`); nome no `.env.example` |
+| `back/.env` | `SEED_TESTE_EMAIL` | identidade da conta de teste opcional — lido por `dados-iniciais.ts`; nome no `.env.example` |
+| `back/.env` | `SEED_TESTE_PASSWORD` | **secreto** — conta de teste opcional (só vale com `SEED_TESTE_EMAIL`); nome no `.env.example` |
 | `front/.env` | `VITE_SUPABASE_URL` | público |
 | `front/.env` | `VITE_SUPABASE_ANON_KEY` | público |
 | `front/.env` | `VITE_API_URL` | público |
@@ -37,8 +39,10 @@ valor (passo 3 abaixo). `PEXELS_API_KEY` saiu do inventário: a fonte de imagens
 passou a ser o Pixabay. Ainda falta, à mão: cadastrar os nomes que o deploy
 precisar no painel da Vercel (os scripts de imagem não rodam na Vercel).
 
-`ENVIAR_CONFIRMO_PRODUCAO=sim` não é segredo nem vai em `.env`: o operador a define no
-próprio terminal, na hora de enviar fotos ao Supabase remoto.
+`ENVIAR_CONFIRMO_PRODUCAO=sim` e `DADOS_INICIAIS_CONFIRMO_PRODUCAO=sim` não são segredo nem vão
+em `.env`: o operador as define no próprio terminal, na hora de enviar fotos ao Supabase remoto
+ou de rodar `db:dados-iniciais` contra o remoto. O agente nunca as define. Os scripts não rodam
+na Vercel, então o painel da Vercel não muda com esses nomes.
 
 Nenhum código lê o `.env` nem o `.env.example` da raiz, nem `back/.env.remote`.
 
