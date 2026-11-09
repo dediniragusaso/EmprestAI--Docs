@@ -20,13 +20,13 @@ Data da execução: ____/____/______   Quem executou: ______________________
 Abra o front publicado (`https://emprest-ai-six.vercel.app`), entre com a **conta de teste** e vá a
 **Catálogo**. Esperado: 12 cards com foto, "9 de 12 equipamentos disponíveis agora", rodapé "Fotos:
 Pixabay" com link.
-- [ ] Print em `docs/evidencias/003-prod-catalogo.png`: ____
+- [ ] Prints: `docs/evidencias/003-prod-catalogo.png` (12 cards) e `docs/evidencias/003-prod-rodape.png` (rodapé "Fotos: Pixabay"): ____
 
 ## 2. Um pedido, de um item (CA-05, CA-19)
 Clique em "Solicitar" em **um** equipamento disponível (sugestão: o de menor patrimônio) e confirme.
 Esperado: modal com "Devolver até" = hoje + 14, toast de confirmação, e o card passa a "Está com você".
 - [ ] Equipamento pedido (patrimônio): ____   "Devolver até" mostrado: ____
-- [ ] Print do modal/toast/card: `docs/evidencias/003-prod-pedido.png`: ____
+- [ ] Prints: `docs/evidencias/003-prod-ca19-modal.png` (modal aberto, antes de confirmar) e `docs/evidencias/003-prod-ca19-resultado.png` (toast, ou o card "Está com você" se perder o toast): ____
 
 ## 3. Meus empréstimos (CA-21)
 Esperado: "1 de 3 itens em seu nome · prazo padrão de 14 dias", uma linha "Em dia", sem botão "Devolver".
