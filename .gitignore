@@ -4,8 +4,9 @@
 .env.*.local
 
 # Repos filhos versionados separadamente
-# (back = API, GitHub EmprestAI--Back; front tera repo proprio)
+# (back = API, GitHub EmprestAI--Back; front = GitHub EmprestAI)
 back/
+front/
 
 # Dependencias e build
 node_modules/
