@@ -106,19 +106,19 @@ abaixo é saída verificada; é declaração do operador ou "a confirmar". Sem s
 |---|---|---|
 | 3. `imagens:enviar` duas vezes (CA-02, CA-04) | Executado, segundo o operador. Linhas de contagem não coladas | Declaração do operador |
 | 4. `db:dados-iniciais` duas vezes (CA-01, CA-04, CA-05) | Executado, segundo o operador: 1ª com 12 criados; 2ª com 0 criados e 12 atualizados. Saídas não coladas | Declaração do operador |
-| 5.1 12 URLs públicas (CA-02) | **A confirmar**: a saída não foi colada | — |
+| 5.1 12 URLs públicas (CA-02) | TI-0001 a TI-0012: todas "200 image/jpeg", segundo o operador. A dimensão 800x600 não foi informada (a spec pede 800x600); saída bruta não colada | Declaração do operador |
 | 5.2 Contagens SQL (CA-01, CA-03, CA-05, CA-07) | **A confirmar** (esperado: 12; DISPONIVEL 9 e MANUTENCAO 3; 12 fotos distintas; 0 empréstimos; professor COLABORADOR). O operador confirma no painel do Supabase | Pendente do operador |
-| 5.3 Login do professor (CA-06) | **A confirmar**: o print não existe em `docs/evidencias/` (só `orientacao-pixabay.md`) e o nome do arquivo não foi informado | Pendente do operador |
+| 5.3 Login do professor (CA-06) | Login funcionando em https://emprest-ai-six.vercel.app. O print mostra "Sessão ativa como marcelo.grilo@institutojef.org.br" e o e-mail no cabeçalho. Arquivo: `docs/evidencias/002-ca06-login-professor-producao.png.jpeg` (o nome real tem a extensão dupla `.png.jpeg`). Visto pelo agente | Print no repositório |
 | 1. Migration no remoto (CA-10) | **A confirmar**: sem declaração. Implícita nas execuções do item 4, mas não registrada | Pendente do operador |
 
 ## Resultado por CA
 | CA | Atendido em produção? | Onde está a prova |
 |---|---|---|
 | CA-01 | A confirmar (execução declarada; contagem SQL pendente) | 4 e 5.2 |
-| CA-02 | A confirmar (envio declarado; URLs não coladas) | 3 e 5.1 |
+| CA-02 | Declarado (200 image/jpeg nas 12; 800x600 não informado) | 3 e 5.1 |
 | CA-03 | A confirmar | 5.2 |
 | CA-04 | Declarado pelo operador; saídas não coladas | 3 e 4 (duas execuções cada) |
 | CA-05 | A confirmar (execução declarada; contagem SQL pendente) | 4 e 5.2 |
-| CA-06 | A confirmar (print ausente) | 5.3 |
+| CA-06 | Sim, com print (login e e-mail na área autenticada). O print não mostra a resposta de `GET /v1/me` | 5.3 |
 | CA-07 | A confirmar | 5.2 |
 | CA-10 | A confirmar | 1 |
