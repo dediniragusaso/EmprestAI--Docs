@@ -20,7 +20,15 @@ Só usam recursos nativos do Node e o sharp. A chave vem de `back/.env` via
    `largeImageURL`, recusa origem menor que 800x600, recorta em "cover" e redimensiona para
    800x600 com o sharp, grava em `back/.preparo-imagens/final/<patrimonio>.jpg` e
    atualiza `back/.preparo-imagens/manifesto.json`. Rodar de novo mantém as fotos já
-   escolhidas; só troca a que foi reprovada.
+   escolhidas; só troca a que foi reprovada. Opções (depois de `--`):
+   - `--escolher=TI-0002:<id>` (repetível) fixa a foto de um equipamento, desde que o id esteja
+     no resultado da busca original e passe as mesmas checagens. Serve para escolher, entre
+     as candidatas, a que passou na pré-triagem visual.
+   - `--pular=TI-0005,TI-0006` deixa os equipamentos sem foto (e sem arquivo) quando nenhuma
+     candidata presta, em vez de aceitar uma foto já julgada ruim. O `validar` acusa
+     "sem entrada no manifesto" para eles.
+   Faça a triagem visual **no tamanho final (800x600)**: em miniatura somem marcas pequenas
+   (ASUS, Logitech, Nikon, texto em caneta).
 2. **Validar** — `npm run imagens:validar` (`-- --exigir-revisao` para exigir revisão completa)
    Confere manifesto, arquivo (JPEG, **exatamente 800x600**), id único e revisão. Sai com
    erro se algo falhar.
