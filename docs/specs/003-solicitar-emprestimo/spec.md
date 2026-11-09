@@ -31,7 +31,7 @@ migration: o schema de `loans`, os índices e `equipment` já existem (001 e 002
 - **rules/** — restrictions, spec-flow, tests, checks, handoff, secrets.
 - **Nome da pasta.** A spec 002 registrou (Q7) que a 003 se chamaria `003-catalogo`. Esta pasta é
   `003-solicitar-emprestimo`, nome dado pelo operador no pedido desta etapa. `AGENTS.md`,
-  `rules/spec-flow.md` e `rules/tests.md` ainda dizem "003-catalogo"; atualizar é a T14.
+  `rules/spec-flow.md` e `rules/tests.md` ainda dizem "003-catalogo"; atualizar é a T18 (CA-25).
 
 ## Regras
 Cada regra traz o motivo. Onde a resposta depende de uma pergunta aberta, a regra remete a ela.
@@ -227,6 +227,8 @@ componente ainda não foi decidida (ADR 002 reservado).
   comando do agente escreve em produção; depois dos testes manuais em produção, a consulta
   `select count(*) from loans l join users u on u.id = l.user_id where u.email =
   'marcelo.grilo@institutojef.org.br'` devolve 0 (resultado colado pelo operador).
+- **CA-25 (processo)** — Nenhum documento ativo (`AGENTS.md`, `rules/`) chama esta fatia de
+  `003-catalogo` nem de `002-catalogo` (busca de texto; históricos e a spec 002 ficam como estão).
 
 ## Contrato afetado
 - **Endpoints novos** em `back/src/modules/`: `GET /v1/equipment`, `POST /v1/loans`,
@@ -292,7 +294,7 @@ Cada uma tem proposta; nenhuma vira código sem o "de acordo".
   não no `package.json`. *Proposta:* instalar na T1, versões fixas, mostrando antes; nenhuma outra
   dependência nova no back nem no front.
 - **Q7 — Nome da pasta.** `003-solicitar-emprestimo` (pedido do operador) em vez de `003-catalogo`
-  (Q7 da 002). Mantive o pedido; confirmar e atualizar `AGENTS.md` e `rules/` (T14).
+  (Q7 da 002). Mantive o pedido; confirmar e atualizar `AGENTS.md` e `rules/` (T18).
 - **Q8 — Auditoria.** A pergunta 6 da modelagem (quais ações auditar) está aberta. *Proposta:*
   registrar só `loan.open` nesta fatia, na mesma transação.
 - **Q9 — Estados e botão em Meus empréstimos.** Sem "A vencer" (a modelagem pergunta 8 está aberta) e
