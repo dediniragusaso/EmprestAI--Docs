@@ -59,6 +59,14 @@ Só usam recursos nativos do Node e o sharp. A chave vem de `back/.env` via
    `ENVIAR_CONFIRMO_PRODUCAO=sim`. Faz upsert em `equipamentos/<patrimonio>.jpg` no bucket
    público `imagens` (criado se não existir); rodar duas vezes não duplica. O agente só testa
    contra o Supabase **local** (`--ignorar-revisao` é aceito só no local).
+5. **Créditos** — `npm run imagens:creditos` (a partir de `back/`) gera
+   `back/scripts/imagens-equipamentos/creditos.json`, **versionado**, a partir do
+   `manifesto.json`. Só roda se o `validar` passar com revisão completa (as 12 aprovadas). Para
+   cada equipamento grava `patrimonio`, `pixabayId`, `autor` (campo `user` do Pixabay),
+   `pageURL` e `licenca` ("Pixabay Content License"). Não leva `user_id` nem outro dado pessoal,
+   nem segredo, nem data (rodar de novo sobre o mesmo manifesto não gera diff). Foi pensado
+   para o seed ler dele (spec `docs/specs/002-dados-iniciais/`). Gere de novo e commite sempre
+   que uma foto mudar.
 
 ## Requisito do contrato → mecanismo
 
