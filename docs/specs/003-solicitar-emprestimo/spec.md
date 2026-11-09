@@ -130,7 +130,8 @@ atraso"; "A vencer" não entra porque o limite de dias não está definido (Q9).
 e modelagem §10 pergunta 8.
 
 **R12 — Tela do catálogo.** Cabeçalho "Catálogo" e a contagem "X de Y equipamentos disponíveis
-agora"; busca por nome e patrimônio (sem diferenciar maiúscula, a cada tecla, com estado vazio
+agora", calculada **na tela** (X = itens `DISPONIVEL`, Y = total dos itens carregados; a API não
+devolve contagem, Q11); busca por nome e patrimônio (sem diferenciar maiúscula, a cada tecla, com estado vazio
 próprio); chips exclusivos Todos, Disponíveis, Emprestados, Em manutenção; grade
 `repeat(auto-fill, minmax(292px, 1fr))`. Botão de cada card, por prioridade, para item
 `DISPONIVEL`: "Bloqueado por atraso" (a pessoa está em atraso, e o banner vermelho aparece no topo
@@ -201,12 +202,15 @@ componente ainda não foi decidida (ADR 002 reservado).
   `dueAt` crescente, com `state` `EM_DIA` ou `EM_ATRASO` e `openLoans`/`maxLoans`; empréstimo de
   outra pessoa do mesmo tenant não aparece, nem para quem tem papel `OPERACOES`.
 - **CA-16 (API)** — Com o relógio do servidor congelado em uma data D, o `dueAt` criado é D + 14 e o
-  `today` do catálogo é D, inclusive perto da meia-noite de `America/Sao_Paulo` (Q2). O código do
-  front não importa `HOJE_DEMO` nem chama `new Date()` para essas datas (busca de texto no `front/src`).
+  `today` do catálogo é D, inclusive perto da meia-noite de `America/Sao_Paulo` (Q2). Há um caso
+  deste CA no teste do `POST /v1/loans` (`dueAt` = D + 14) e outro no do `GET /v1/equipment`
+  (`today` = D).
 - **CA-17 (API)** — Corpo inválido em `POST /v1/loans` (sem `equipmentId`, id que não é uuid)
   devolve 400 em Problem Details e não grava nada.
-- **CA-18 (API)** — Cada abertura grava uma linha `loan.open` em `audit_logs` (ator, tenant, recurso
-  `loan`) na mesma transação do empréstimo; recusa não grava (Q8).
+- **CA-18 (API)** — Cada abertura grava uma linha em `audit_logs` na mesma transação do
+  empréstimo, com `action` = `loan.open`, `resource_type` = `loan`, `resource_id` = id do `loan`
+  criado, `tenant_id` = o tenant resolvido pelo `TenantGuard` e `actor_user_id` = o id do usuário
+  autenticado (o `sub` do JWT, a mesma pessoa de `loans.user_id`); recusa não grava (Q8).
 - **CA-19 (Tela)** — Fluxo feliz: "Solicitar" abre o modal com o "Devolver até" que a API devolveu;
   confirmar fecha o modal, mostra o toast, o card passa a "Está com você" e o item aparece em Meus
   empréstimos. Prints do modal, do toast e do resultado.
@@ -220,15 +224,24 @@ componente ainda não foi decidida (ADR 002 reservado).
 - **CA-22 (Tela)** — Rodapé do catálogo com "Fotos: Pixabay" e link para `https://pixabay.com`; o
   placeholder "O catálogo chega na próxima fatia" não existe mais (busca de texto no `front/src`).
   Print do rodapé.
-- **CA-23 (Tela e API)** — Busca e chips: digitar parte do nome ou do patrimônio filtra a cada tecla
-  sem diferenciar maiúscula; os chips são exclusivos; a contagem "X de Y" é a da API. Print.
-- **CA-24 (processo)** — Nenhum teste automatizado lê `.env`, `DATABASE_URL` ou fala com Supabase
-  remoto (busca de texto em `back/src` e `back/prisma` por esses nomes nos `*.spec.ts`); nenhum
+- **CA-23 (Tela)** — Busca e chips: digitar parte do nome ou do patrimônio filtra a cada tecla
+  sem diferenciar maiúscula; os chips são exclusivos; a contagem "X de Y" é calculada na tela a partir dos itens
+  carregados (Q11) e confere com o número de cards `DISPONIVEL` visíveis sem filtro. Print.
+- **CA-24 (processo)** — Nenhum teste automatizado fala com o Supabase remoto: os testes recebem a
+  URL do contêiner do Testcontainers e nenhum `*.spec.ts` nem o helper `back/src/testing/` lê `.env`
+  nem usa host `supabase.co`. A busca por `DATABASE_URL` vale **só para o código de produção**
+  (`back/src` sem `*.spec.ts` e sem `back/src/testing/`): ele aparece apenas em `config/env.ts` e
+  `modules/prisma/prisma.service.ts`. Nenhum
   comando do agente escreve em produção; depois dos testes manuais em produção, a consulta
   `select count(*) from loans l join users u on u.id = l.user_id where u.email =
   'marcelo.grilo@institutojef.org.br'` devolve 0 (resultado colado pelo operador).
 - **CA-25 (processo)** — Nenhum documento ativo (`AGENTS.md`, `rules/`) chama esta fatia de
-  `003-catalogo` nem de `002-catalogo` (busca de texto; históricos e a spec 002 ficam como estão).
+  `003-catalogo` nem de `002-catalogo`, e as referências antigas a esta fatia nas regras estão
+  acertadas: "Tarefa 9 da 003" em `rules/tests.md` e `MeusEmprestimos.tsx` em
+  `rules/qualidade-codigo.md` (busca de texto; históricos e a spec 002 ficam como estão).
+- **CA-26 (Tela, busca de texto)** — O código do front não importa `HOJE_DEMO` nem chama `new
+  Date()` para "hoje", atraso ou prazo (busca de texto em `front/src`; as datas mostradas vêm da
+  API, R8).
 
 ## Contrato afetado
 - **Endpoints novos** em `back/src/modules/`: `GET /v1/equipment`, `POST /v1/loans`,
@@ -329,12 +342,12 @@ Texto original das perguntas, com a proposta de cada uma:
 
 ## Como sei que funcionou
 - Back (`cd back`): `npm run build` (exit 0) e `npm test` com a última linha "Ran all test suites."
-  e os casos de CA-01, 03, 05 a 18 passando, cada nome de caso citando o `CA-xx`. `lint` não existe.
+  e os casos de CA-01, 03, 05 a 18 passando (CA-16 em dois deles), cada nome de caso citando o `CA-xx`. `lint` não existe.
 - Front (`cd front`): `npm run build` (`tsc --noEmit && vite build`) com exit 0. `lint`, `typecheck`
   e `test` não existem (declarar). Os CA de "Tela" ficam com print em `docs/evidencias/` e a
   data/ambiente da execução (local, e produção só com a conta de teste).
 - Busca de texto: o aviso "O catálogo chega na próxima fatia", `HOJE_DEMO` e `new Date()` no código
-  de datas do front não aparecem em `front/src` (CA-16, CA-22).
+  de datas do front não aparecem em `front/src` (CA-26, CA-22).
 - `git status --short` nos três repositórios: só arquivos do escopo da tarefa.
 - Verificador (`rules/spec-flow.md`): a spec só vira `Status: PRONTA` com `Veredito: PRONTA`. Esta
   etapa entrega só a spec, o plano e as tarefas; **nada foi implementado**.
