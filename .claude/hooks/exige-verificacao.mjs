@@ -1,8 +1,10 @@
 // Hook PreToolUse (.claude/settings.json). Lê o JSON do harness na entrada padrão.
-// Bloqueia (exit 2) duas ações se a spec não tiver verificacao-rodada-<N>.md
-// com "Veredito: PRONTA" cujos HEADs (raiz, front, back) batam com os atuais:
-//   1. `git push`;
-//   2. marcar a spec como PRONTA (linha `Status: PRONTA` em spec.md/plan.md/tasks.md).
+// Uma spec "marcada PRONTA" (linha `Status: PRONTA` em spec.md/plan.md/tasks.md)
+// precisa de verificacao-rodada-<N>.md com "Veredito: PRONTA" cujos HEADs
+// (raiz, front, back) batam com os atuais. O hook bloqueia (exit 2):
+//   1. `git push`, se existir alguma spec marcada PRONTA sem essa evidência;
+//   2. marcar uma spec como PRONTA sem essa evidência.
+// Spec sem `Status: PRONTA` (por exemplo `Status: EM ABERTO`) não bloqueia nada.
 // Procedimento e limitações: rules/spec-flow.md, seção "Gatilho obrigatório".
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -112,13 +114,19 @@ function validar(nomeSpec) {
   return null;
 }
 
-function especAtiva() {
-  if (!existsSync(SPECS)) return null;
-  const nomes = readdirSync(SPECS, { withFileTypes: true })
+// Pastas de spec cujo spec.md, plan.md ou tasks.md (no disco) tem `Status: PRONTA`.
+function especsMarcadasPronta() {
+  if (!existsSync(SPECS)) return [];
+  return readdirSync(SPECS, { withFileTypes: true })
     .filter((d) => d.isDirectory() && /^\d{3}-/.test(d.name))
     .map((d) => d.name)
-    .sort();
-  return nomes.length ? nomes[nomes.length - 1] : null;
+    .sort()
+    .filter((nome) =>
+      ['spec.md', 'plan.md', 'tasks.md'].some((f) => {
+        const arq = join(SPECS, nome, f);
+        return existsSync(arq) && MARCA.test(readFileSync(arq, 'utf8'));
+      }),
+    );
 }
 
 function bloquear(acao, motivo) {
@@ -128,10 +136,9 @@ function bloquear(acao, motivo) {
 
 if (tool === 'Bash' && typeof ti.command === 'string') {
   if (isGitPush(ti.command)) {
-    const ativa = especAtiva();
-    if (ativa) {
-      const motivo = validar(ativa);
-      if (motivo) bloquear('git push', motivo);
+    for (const nome of especsMarcadasPronta()) {
+      const motivo = validar(nome);
+      if (motivo) bloquear('git push', `spec ${nome} está marcada PRONTA sem evidência válida: ${motivo}`);
     }
   } else if (/docs[\\/]specs[\\/]/.test(ti.command) && MARCA.test(ti.command.replace(/\\n/g, '\n'))) {
     const m = /docs[\\/]specs[\\/]([^\\/\s"']+)/.exec(ti.command);

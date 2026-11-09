@@ -78,21 +78,31 @@ da spec da fatia.
 
 ## Gatilho obrigatório
 Mecanismo: hook `PreToolUse` do harness, em `.claude/settings.json`, que
-executa `.claude/hooks/exige-verificacao.mjs`. Ele bloqueia (exit 2) duas
-ações:
-1. **`git push`** (em qualquer repositório) quando a spec ativa — a de maior
-   `NNN` em `docs/specs/` — não tem `verificacao-rodada-<N>.md` válido.
-2. **Marcar a spec como PRONTA**: gravar em `spec.md`, `plan.md` ou `tasks.md`
-   uma linha `Status: PRONTA` (convenção deste hook; não existia antes) pela
-   ferramenta Write/Edit/MultiEdit ou por um comando Bash que cite
-   `docs/specs/`.
+executa `.claude/hooks/exige-verificacao.mjs` (casos de teste em
+`.claude/hooks/exige-verificacao.test.mjs`: `node .claude/hooks/exige-verificacao.test.mjs`).
 
-"Válido" = a rodada de maior `<N>` da pasta da spec existe, termina em
-`Veredito: PRONTA` e os HEADs que ela registra batem com os atuais:
+**Marca de estado.** Toda spec registra no `spec.md` uma linha `Status: EM ABERTO`
+ou `Status: PRONTA`. Só `Status: PRONTA` aciona o hook; spec em aberto, ou sem
+a linha, não bloqueia nada.
+
+O hook bloqueia (exit 2) duas ações:
+1. **`git push`** (em qualquer repositório), se existir alguma spec marcada
+   `Status: PRONTA` (em `spec.md`, `plan.md` ou `tasks.md`, no disco) sem
+   evidência válida.
+2. **Marcar uma spec como PRONTA** sem evidência válida: gravar a linha
+   `Status: PRONTA` pelas ferramentas Write/Edit/MultiEdit, ou por um comando
+   Bash que cite `docs/specs/`.
+
+"Evidência válida" = a rodada de maior `<N>` da pasta da spec
+(`verificacao-rodada-<N>.md`) existe, termina em `Veredito: PRONTA` e os HEADs
+que ela registra batem com os atuais:
 - `front` e `back`: o HEAD atual é igual ao registrado.
 - raiz: igual, ou posterior com diferença só em `verificacao-rodada-*.md` e na
   linha `Status:` do `spec.md` (a raiz guarda a própria evidência).
-Sem nenhuma pasta de spec em `docs/specs/`, o push não é barrado.
+
+Ordem de trabalho: verificar (rodada com `Veredito: PRONTA`) → só então gravar
+`Status: PRONTA` → commitar → push. Uma rodada `NÃO PRONTA` não bloqueia o
+push da spec que continua `Status: EM ABERTO`: ela bloqueia a marcação.
 
 Limitações conhecidas — leia antes de confiar:
 - **O agente pode forjar o arquivo de evidência.** O hook confere o texto e os
@@ -100,11 +110,12 @@ Limitações conhecidas — leia antes de confiar:
   um `verificacao-rodada-<N>.md` com `Veredito: PRONTA` e os HEADs corretos sem
   rodar o verificador. Ele também pode editar `.claude/settings.json` ou o
   script do hook. O mecanismo detecta esquecimento, não má-fé.
+- **Só barra push depois da marcação.** Spec que nunca recebe a linha
+  `Status:` (ou que fica `EM ABERTO`) segue para o push sem verificação; a
+  disciplina de marcar o estado é de quem escreve a spec.
 - Só vale dentro do harness: `git push` no terminal, por fora do Claude Code,
   não passa pelo hook.
 - Trabalho não commitado não entra no HEAD; o verificador registra a árvore
   como `limpa` ou `suja`, mas o hook não a confere.
-- O bloqueio de "marcar PRONTA" por Bash é por texto (`docs/specs/` e
-  `Status: PRONTA` no comando) e não pega comando montado de outro jeito.
-- Hoje a spec ativa é `001-login`, sem rodada: `git push` fica barrado até a
-  primeira verificação.
+- O bloqueio de "marcar PRONTA" por Bash é por texto (`docs/specs/` e a linha
+  de status no comando) e não pega comando montado de outro jeito.
