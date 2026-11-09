@@ -1,55 +1,45 @@
-# Evidências de tela — 003-solicitar-emprestimo (índice)
+# Evidências de tela — 003-solicitar-emprestimo (índice, estado real em 09/11/2026)
 
-Provas manuais dos CA de "Tela" (sem Playwright, decisão do operador). **O agente não tem navegador
-nesta sessão e não tirou nenhum print**: a captura é do operador. Todos os arquivos ficam **nesta
-pasta** (`docs/evidencias/`), com o nome exato da coluna "Arquivo". Preencha data e ambiente.
+Provas manuais dos CA de "Tela" (sem Playwright, decisão do operador). O agente não tem navegador e
+**não tirou nenhum print**: todos são do operador. Em 09/11/2026 o operador decidiu **não produzir mais
+prints, por prazo**. Este índice lista só o que existe em `docs/evidencias/` (conferido com `ls`) e
+o que o agente viu abrindo cada arquivo. Ambiente "produção" = Vercel, conta de teste; "local" = back e
+front locais, banco local.
 
-**CA-19 = prints de produção (itens 3 e 4).** Os prints locais 9, 10 e 11 foram dispensados pelo operador em 09/11/2026.
+## O que existe (arquivos da 003)
+| # | Arquivo | Ambiente | O que mostra | CA |
+|---|---|---|---|---|
+| 1 | `003-prod-catalogo.png` | produção | cabeçalho "9 de 12 equipamentos disponíveis agora", 4 chips, e-mail da conta de teste, cards TI-0001 a TI-0003 | CA-02 |
+| 2 | `003-prod-catalogo-2.png` | produção | os 12 cards juntos, reduzidos (grade 3x4, TI-0001 a TI-0012) | CA-02 |
+| 3 | `003-prod-rodape.png` | produção | TI-0010 (Em manutenção, "Indisponível"), TI-0011, TI-0012 e "Fotos: Pixabay" com link | CA-02, CA-22, CA-04 ("Indisponível") |
+| 4 | `003-prod-ca19-modal.png` | produção | modal "Solicitar empréstimo", Notebook 14 polegadas, "Devolver até 23/11/2026" | CA-19 |
+| 5 | `003-prod-ca19-resultado.png` | produção | toast "Empréstimo registrado…", TI-0001 "Está com você · devolução prevista até 23/11/2026", "8 de 12" | CA-19, CA-04 ("Está com você") |
+| 6 | `003-prod-meus.png` | produção | Meus empréstimos: "1 de 3 itens", linha "Em dia", sem "Devolver" | CA-19, CA-21 (1 item) |
+| 7 | `003-prod-ca21-vazio.png` | produção | Meus empréstimos: "0 de 3 itens", barra vazia, caixa tracejada "Ir ao catálogo" | CA-21 (vazio) |
+| 8 | `003-prod-ca23-busca.png` | produção | "monitor" digitado: só Monitor 24, 27 e 22 polegadas | CA-23 |
+| 9 | `003-prod-ca23-chip.png` | produção | chip "Em manutenção" ativo: TI-0004, TI-0007 e TI-0010 | CA-23 |
+| 10 | `003-local-ca04-emprestado-outra-pessoa.png` | local | TI-0001 "Emprestado · devolução prevista até 23/11/2026", botão "Emprestado", sem nome de pessoa | CA-04 |
+| 11 | `003-local-ca20-atraso.png` | local | banner vermelho de atraso, TI-0001 "Está com você · … 06/11/2026", "Bloqueado por atraso" nos disponíveis | CA-20 (atraso) |
+| 12 | `003-local-ca21-tres.png` | local | **O nome diz CA-21, mas o arquivo mostra o Catálogo**: 3 itens "Está com você" e "Limite de 3 itens" nos disponíveis. Prova o CA-20 (limite); **não** prova o CA-21 ("3 de 3" em Meus empréstimos) | CA-20 (limite) |
 
-Windows: `Win + Shift + S` (recorte) ou `Win + PrtScn` (salva em Imagens\Capturas de tela). O toast
-dura 2,6 s: dispare `Win + PrtScn` logo depois de clicar.
+Fora desta lista, sem relação com a 003: `002-ca06-login-professor-producao.png.jpeg` e `orientacao-pixabay.md`.
+O CA-24 não tem print: o resultado do SQL está em `docs/specs/003-solicitar-emprestimo/evidencias-producao.md`.
+Dispensados pelo operador em 09/11/2026 (o CA-19 é provado pelos prints 4 a 6): os prints locais de CA-19.
 
-## Situação em 09/11/2026
-- **Existem** (conferidos pelo agente): os 5 prints de produção, itens 1 a 5, com os nomes exatos, e o
-  print extra `003-prod-catalogo-2.png` (item 1b). CA-02: `003-prod-catalogo.png` mostra os cards 1 a 6,
-  `003-prod-catalogo-2.png` os cards 7 a 9 (o arquivo, reduzido, mostra na verdade os 12 cards juntos,
-  TI-0001 a TI-0012, em grade 3x4) e `003-prod-rodape.png` os cards 10 a 12; juntos provam os 12. O item 6 (textos do SQL) está
-  registrado no `evidencias-producao.md`, com a nota do engano com a conta do professor.
-- **Dispensados** pelo operador: os locais 9, 10 e 11 (CA-19).
-- **PENDENTES** (prints locais, nenhum arquivo existe ainda):
-  - CA-04: item 7 `003-local-ca04-esta-com-voce.png`, item 8 `003-local-ca04-emprestado-outra-pessoa.png`
-  - CA-20: item 12 `003-local-ca20-limite.png`, item 13 `003-local-ca20-atraso.png`, item 14 `003-local-ca20-recusa-409.png`
-  - CA-21: item 15 `003-local-ca21-vazio.png`, item 16 `003-local-ca21-um.png`, item 17 `003-local-ca21-tres.png`, item 18 `003-local-ca21-atraso.png`
-  - CA-23: item 19 `003-local-ca23-busca.png`, item 20 `003-local-ca23-chip.png`
+## Por CA
+| CA | Prova que existe | O que falta |
+|---|---|---|
+| CA-02 | 1, 2 e 3 | nada pedido (o quadro neutro sem foto não tem print; os 12 itens têm foto) |
+| CA-04 | 3 ("Indisponível"), 5 ("Está com você"), 10 ("Emprestado", sem nome) | nada |
+| CA-19 | 4, 5 e 6 | nada |
+| CA-20 | 11 (atraso) e 12 (limite) | **SEM PROVA: o operador decidiu não produzir, por prazo** — recusa 409 em texto na tela |
+| CA-21 | 6 (1 item) e 7 (vazio) | **SEM PROVA: o operador decidiu não produzir, por prazo** — Meus empréstimos com 3 itens e com atraso |
+| CA-22 | 3 | nada |
+| CA-23 | 8 e 9 | nada |
 
-## Produção (Vercel, conta de teste; nunca a do professor)
-| # | CA | Arquivo | O que precisa estar visível | Data | Ambiente |
-|---|---|---|---|---|---|
-| 1 | CA-02 | `003-prod-catalogo.png` | 12 cards com foto 4:3, nome, categoria, patrimônio, pill; "9 de 12 equipamentos disponíveis agora"; chips; e-mail da conta de teste | 09/11/2026 | Produção (Vercel), conta de teste |
-| 1b | CA-02 | `003-prod-catalogo-2.png` | os cards TI-0007 a TI-0009 (o arquivo, reduzido, traz os 12 cards em grade 3x4) | 09/11/2026 | Produção (Vercel), conta de teste |
-| 2 | CA-22 | `003-prod-rodape.png` | rodapé "Fotos: Pixabay" com o link | 09/11/2026 | Produção (Vercel), conta de teste |
-| 3 | CA-19 (prova) | `003-prod-ca19-modal.png` | modal "Solicitar empréstimo" com o equipamento e "Devolver até" (hoje + 14) | 09/11/2026 | Produção (Vercel), conta de teste |
-| 4 | CA-19 (prova) | `003-prod-ca19-resultado.png` | toast "Empréstimo registrado…"; se perder o toast, repita (limpeza 5.2 do `evidencias-producao.md` e novo pedido) ou registre o card "Está com você" como resultado | 09/11/2026 | Produção (Vercel), conta de teste |
-| 5 | CA-21 | `003-prod-meus.png` | "1 de 3 itens em seu nome · prazo padrão de 14 dias", uma linha "Em dia", sem botão "Devolver" | 09/11/2026 | Produção (Vercel), conta de teste |
-| 6 | CA-24 | (texto) | resultado das consultas, colado em `docs/specs/003-solicitar-emprestimo/evidencias-producao.md` (passos 4 a 6) | 09/11/2026 | Produção (SQL Editor), texto no `evidencias-producao.md` |
-
-## Local (back e front locais; banco local; cenários de `cenarios-locais.sql`)
-| # | CA | Cenário | Arquivo | O que precisa estar visível | Data |
-|---|---|---|---|---|---|
-| 7 | CA-04 | `um`, conta de teste | `003-local-ca04-esta-com-voce.png` | TI-0001 "Está com você · devolução prevista até…" e um card em manutenção com "Indisponível" | |
-| 8 | CA-04 | `um`, professor **local** | `003-local-ca04-emprestado-outra-pessoa.png` | TI-0001 "Emprestado · devolução prevista até…", botão "Emprestado", sem nome de pessoa | |
-| 9 | CA-19 | — | ~~`003-local-ca19-modal.png`~~ | **DISPENSADO** pelo operador em 09/11/2026: o CA-19 é provado pelos prints de produção 3 e 4 | |
-| 10 | CA-19 | — | ~~`003-local-ca19-toast.png`~~ | **DISPENSADO** (idem) | |
-| 11 | CA-19 | — | ~~`003-local-ca19-resultado.png`~~ | **DISPENSADO** (idem) | |
-| 12 | CA-20 | `limite` | `003-local-ca20-limite.png` | "Limite de 3 itens" desabilitado nos cards disponíveis | |
-| 13 | CA-20 | `atraso` | `003-local-ca20-atraso.png` | banner vermelho de atraso e "Bloqueado por atraso" | |
-| 14 | CA-20 | duas janelas | `003-local-ca20-recusa-409.png` | toast vermelho com o motivo em texto ("Emprestado: outra pessoa acabou de ficar com este equipamento.") | |
-| 15 | CA-21 | `limpar` | `003-local-ca21-vazio.png` | caixa tracejada com "Ir ao catálogo" | |
-| 16 | CA-21 | `um` | `003-local-ca21-um.png` | "1 de 3 itens…", sem botão "Devolver" | |
-| 17 | CA-21 | `limite` | `003-local-ca21-tres.png` | "3 de 3 itens…" e os 3 traços ocupados | |
-| 18 | CA-21 | `atraso` | `003-local-ca21-atraso.png` | linha vermelha "Em atraso" e traço vermelho | |
-| 19 | CA-23 | `limpar` | `003-local-ca23-busca.png` | "monitor" digitado e só os 3 monitores listados | |
-| 20 | CA-23 | `limpar` | `003-local-ca23-chip.png` | chip "Em manutenção" ativo e os 3 cards em manutenção | |
+## SEM PROVA: o operador decidiu não produzir, por prazo
+- **CA-20:** recusa 409 vinda da API aparecendo em texto na tela (arquivo previsto `003-local-ca20-recusa-409.png`, não existe).
+- **CA-21:** Meus empréstimos com 3 empréstimos (previsto `003-local-ca21-tres.png`; o arquivo com esse nome mostra o catálogo) e com um empréstimo em atraso (previsto `003-local-ca21-atraso.png`, não existe).
 
 ## Subir o ambiente local (sem ler `.env`)
 As variáveis ficam **só nessa janela do PowerShell** e vencem o `back/.env` e o `front/.env`, que
