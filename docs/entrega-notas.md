@@ -90,6 +90,8 @@ Linguagem impersonal. Cada item aponta para evidência verificável.
 - Na 003, `rules/checks.md` passo 2 (reset de migration) não se aplicou: a fatia não tem migration; `rules/checks.md` passo 3 (build) não compila `src/testing` por escolha do `tsconfig.build.json`, então o helper de teste só é tipado pelo `ts-jest` | commit 7833375 (repo back)
 - Na 003, o teste de concorrência provou a regra de verdade: os 4 casos (CA-10, CA-11 duas vezes e CA-12) falharam antes do lock e passaram depois | commit 5219a89 (repo back)
 
+- Na 003, a R14 ("testes manuais em produção só com a conta de teste, nunca a do professor") é só regra escrita, sem imposição técnica: segundo o operador, o TI-0001 chegou a ficar emprestado à conta do professor por engano antes do teste; foi limpo por SQL e a consulta final deu 0 empréstimos do professor, mas as duas auditorias `loan.open` permanecem (append-only) e a limpeza do professor não tem o SQL registrado | docs/specs/003-solicitar-emprestimo/evidencias-producao.md
+
 ## Seção 8 · Ficou de fora
 - 001-login em aberto como dívida | commit 4f9a30b
 - Front sem runner de teste; ADR 002 inexistente
