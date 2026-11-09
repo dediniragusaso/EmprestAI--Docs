@@ -26,7 +26,7 @@ Os scripts abaixo existem nos package.json; este arquivo nao registra que algum 
 - Deploy: Vercel, ligada ao repositorio remoto de cada projeto. Push publica.
 - Configuracao vem de variavel de ambiente. Inventario em rules/secrets.md; os nomes versionados estao em front/.env.example e back/.env.example.
 - Repositorios: tres, cada um com o seu .git.
-  - Raiz (docs, rules, agents, supabase, AGENTS.md, layout.md): remote `origin` github.com/dediniragusaso/EmprestAI--Docs (push da raiz publica so a documentacao; nao ha deploy ligado a ela).
+  - Raiz (docs, rules, agents, supabase, AGENTS.md, layout.md): remote `origin` github.com/dediniragusaso/EmprestAI--Docs.
   - front/: remote `origin` github.com/dediniragusaso/EmprestAI.
   - back/: remote `origin` github.com/dediniragusaso/EmprestAI--Back.
   - A raiz ignora back/ no .gitignore; front/ esta registrado no indice da raiz como gitlink (commit 63a264d, modo 160000) e nao existe .gitmodules: a raiz nao guarda o conteudo dele.
