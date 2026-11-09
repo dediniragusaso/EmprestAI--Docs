@@ -90,12 +90,31 @@ permanece: 1). **Veio 2** por causa do engano registrado abaixo.
 
 ## Nota do operador: o professor teve um empréstimo por engano (desvio da R14)
 Segundo o operador, **antes** do teste com a conta de teste, o TI-0001 ficou emprestado, por engano, à
-conta do professor (`marcelo.grilo@institutojef.org.br`). Ele limpou no SQL (o texto do SQL usado
-nessa limpeza não foi registrado) e o professor voltou a **0 empréstimos**, confirmado na consulta final
+conta do professor (`marcelo.grilo@institutojef.org.br`). Ele limpou no SQL (SQL registrado abaixo) e o professor voltou a **0 empréstimos**, confirmado na consulta final
 (`emprestimos_do_professor` = 0). Por isso `auditorias_loan_open` = 2: uma do professor e uma da conta
 de teste; as duas **permanecem**, porque `audit_logs` é append-only. O agente não tem como conferir
 essa parte além da consulta final. Isto contraria a R14 ("nunca com a do professor"): o **estado final**
 cumpre o CA-24, mas o histórico de auditoria em produção guarda um `loan.open` do professor.
+
+**Decisão do operador em 09/11/2026:** o estado final de produção cumpre o texto do CA-24; o deslize é
+registrado como **desvio da R14** e **não é motivo para reprovar o CA-24**.
+
+**SQL de limpeza do professor**, executado pelo operador no SQL Editor, em transação, conforme a
+descrição dele (update do equipamento para `DISPONIVEL` e delete do empréstimo aberto do e-mail do
+professor). O texto exato não foi colado; o abaixo é o 5.2 com o e-mail do professor, reconstituído
+pelo agente a partir dessa descrição:
+```sql
+begin;
+update equipment
+   set status = 'DISPONIVEL', updated_at = now()
+ where status = 'EMPRESTADO'
+   and id in (select l.equipment_id from loans l join users u on u.id = l.user_id
+               where u.email = 'marcelo.grilo@institutojef.org.br' and l.returned_at is null);
+delete from loans
+ where returned_at is null
+   and user_id = (select id from users where email = 'marcelo.grilo@institutojef.org.br');
+commit;
+```
 
 ## Resultado por CA
 | CA | Atendido em produção? | Onde está a prova |
@@ -105,4 +124,4 @@ cumpre o CA-24, mas o histórico de auditoria em produção guarda um `loan.open
 | CA-19 | Sim: modal com "Devolver até 23/11/2026", toast e card "Está com você" | 2 (prints de produção; os locais foram dispensados pelo operador em 09/11/2026) |
 | CA-21 | Parcial: só o caso de 1 empréstimo em produção; vazio, 3 e atraso são dos prints locais (pendentes) | 3 |
 | CA-22 | Sim: rodapé "Fotos: Pixabay" com link; o placeholder não existe (busca de texto) | 1 |
-| CA-24 | Sim no estado final (professor com 0 empréstimos, 9 DISPONIVEL, 3 MANUTENCAO); com o desvio da nota acima | 4, 5 e 6 |
+| CA-24 | Sim: estado final com professor em 0 empréstimos, 9 DISPONIVEL e 3 MANUTENCAO. Desvio da R14 registrado na nota acima; o operador decidiu que não reprova o CA-24 | 4, 5 e 6 |
