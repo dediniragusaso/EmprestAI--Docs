@@ -6,8 +6,8 @@ tarefa de código (`rules/checks.md`): back `cd back && npm run build` (exit 0) 
 `lint` do back, **não existem** (declarar em cada tarefa, não pular). Migration: nenhuma nesta fatia,
 então o `migrate reset` não se aplica. Nenhuma tarefa escreve em produção nem lê `.env`.
 
-- [ ] T0 Aprovar a spec e responder Q1 a Q13, gravando as respostas na `spec.md`. Sem código.
-  (bloqueia CA-01 a CA-25) — raiz.
+- [x] T0 Aprovar a spec e responder Q1 a Q13, gravando as respostas na `spec.md`. Sem código.
+  (bloqueia CA-01 a CA-26) — raiz. Evidência: decidido pelo operador em 09/11/2026; commit `2642daa`.
 - [ ] T1 Instalar `supertest` e `@types/supertest` no back, versões fixas, mostrando a versão antes
   (Q6; ADR-001 §8). (base de CA-01, CA-03, CA-05 a CA-18) — back.
 - [ ] T2 `PrismaModule` e `PrismaService` globais e `DATABASE_URL` no schema Zod do boot, em
@@ -26,16 +26,16 @@ então o `migrate reset` não se aplica. Nenhuma tarefa escreve em produção ne
 - [ ] T7 `GET /v1/equipment`: controller, service, repository, schemas, cursor e bloco `viewer`, com
   `equipment.controller.spec.ts`. (CA-01, CA-03, CA-13, CA-14, CA-16) — back.
 - [ ] T8 `POST /v1/loans`: regras (R6, R7), atomicidade, auditoria `loan.open` e as quatro recusas
-  com `code`, com `loans.controller.spec.ts`. (CA-05, CA-06, CA-07, CA-08, CA-09, CA-13, CA-14,
-  CA-17, CA-18) — back.
+  com `code`, com `loans.controller.spec.ts`, incluindo o caso do relógio congelado
+  (`dueAt` = D + 14, às 23:59 e às 00:01 de Brasília). (CA-05, CA-06, CA-07, CA-08, CA-09, CA-13,
+  CA-14, CA-16, CA-17, CA-18) — back.
 - [ ] T9 Concorrência: lock por pessoa (`pg_advisory_xact_lock`), `FOR UPDATE` no equipamento,
   tradução do `P2002` do índice parcial para 409, e `loans.concurrency.spec.ts` com 20 repetições.
   (CA-10, CA-11, CA-12) — back.
 - [ ] T10 `GET /v1/loans/mine`: só os abertos da pessoa, `state` e cursor, com os casos no
   `loans.controller.spec.ts`. (CA-15, CA-13, CA-14) — back.
 - [ ] T11 Front: camada de API (`getEquipment` com todas as páginas, `postLoan`, `getMyLoans`,
-  `ApiProblem`) em `front/src/lib/api.ts` e `front/src/lib/dates.ts` sem `new Date()`. (CA-16 no
-  front) — front.
+  `ApiProblem`) em `front/src/lib/api.ts` e `front/src/lib/dates.ts` sem `new Date()`. (CA-26) — front.
 - [ ] T12 Front: `AppShell` com as abas, rotas `/catalogo` e `/meus-emprestimos`, `/` redireciona,
   remoção de `HomePage` e do placeholder, e as classes do ADR-003 §4 que faltam em `index.css`.
   (CA-22) — front.
@@ -51,10 +51,13 @@ então o `migrate reset` não se aplica. Nenhuma tarefa escreve em produção ne
   ambiente, e um índice em `docs/evidencias/003-indice.md`. (CA-02, CA-04, CA-19, CA-20, CA-21,
   CA-22, CA-23) — raiz.
 - [ ] T17 Modelo `docs/specs/003-solicitar-emprestimo/evidencias-producao.md`: roteiro do operador
-  com a conta de teste (nunca a do professor), a consulta do CA-24 e o SQL de limpeza dos itens
-  emprestados nos testes. Só prepara; **o operador executa**. (CA-24) — raiz.
+  com a conta de teste (nunca a do professor), a consulta do CA-24 e o SQL de limpeza (voltar o item
+  para `DISPONIVEL` e apagar o empréstimo de teste), para **um** pedido de **um** item. Só prepara; **o operador executa**. (CA-24) — raiz.
 - [ ] T18 Atualizar `AGENTS.md`, `rules/spec-flow.md`, `rules/tests.md` e `rules/qualidade-codigo.md`
-  para o nome da fatia (Q7); a spec 002 **não** é editada. (CA-25) — raiz.
+  para o nome da fatia (Q7); em `rules/tests.md`, trocar "a Tarefa 9 da 003" (biblioteca de teste de
+  componente, que não é desta fatia) e a "Q4 da 003 … Tarefa 12" do `HOJE_DEMO`; em
+  `rules/qualidade-codigo.md`, `MeusEmprestimos.tsx` → `MeusEmprestimosPage.tsx`. A spec 002 **não** é
+  editada. (CA-25) — raiz.
 - [ ] T19 Rodar o `verificador-spec` (`rules/spec-flow.md`) com um intervalo por repositório e salvar
   `verificacao-rodada-<N>.md`; corrigir o que ele apontar (quem corrige é o agente principal); só com
-  `Veredito: PRONTA` gravar `Status: PRONTA`. (CA-01 a CA-25) — raiz.
+  `Veredito: PRONTA` gravar `Status: PRONTA`. (CA-01 a CA-26) — raiz.
