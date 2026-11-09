@@ -46,10 +46,14 @@ alwaysApply: true
   ambiente, redeploy) são permitidos quando o operador pedir na tarefa.
   Variável de ambiente segue o `rules/secrets.md`: nenhum valor de segredo
   em resposta, log ou commit.
-- No projeto Supabase remoto é permitido criar e gerenciar usuários do Auth
-  quando o operador pedir. Continua proibido por lá: SQL, alteração de
-  schema e de dado de domínio. Migrations e o reset do checks.md acontecem
-  no banco local.
+- **Produção** é o banco, o Storage e o Auth do deploy (o projeto Supabase
+  remoto). **O agente nunca escreve em produção; quem executa é o operador.**
+  Isso inclui: criar, alterar ou apagar usuário do Auth; SQL, alteração de
+  schema e de dado de domínio; `prisma migrate deploy`; envio de arquivo ao
+  Storage. O agente prepara (migration, script, comando) e descreve o que o
+  operador deve rodar; não roda. Migrations e o reset do checks.md acontecem
+  no banco local. Esta regra vale mesmo que o operador peça no meio de uma
+  tarefa: nesse caso, lembre-o desta linha.
 - Mexer em `.env` ou em config de deploy exige pedir antes (`rules/operacao.md`):
   eles estão no `.gitignore` e contêm segredo (`SUPABASE_SERVICE_ROLE_KEY`) — nenhum valor vai para commit, log ou resposta.
 
