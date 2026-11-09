@@ -10,14 +10,12 @@ alwaysApply: true
 ## Quando
 Ao iniciar qualquer funcionalidade nova do PRD, ou ao mexer numa
 funcionalidade que ainda não tem spec. Vale para as duas pontas: a tela no
-`frontend/` e o endpoint no `backend/`.
+`front/` e o endpoint no `back/`.
 
-O `docs/` versionado é o do repositório do front (`emprest.ai-front`):
-`frontend/docs/specs/<NNN-nome-curto>/`. Da raiz do workspace use esse
-caminho; dentro do repositório do front ele é `docs/specs/<NNN-nome-curto>/`.
-Spec escrita fora dele (por exemplo na cópia de `docs/` da raiz do
-workspace) não é commitada em lugar nenhum e o `git status` do checks.md
-não a vê.
+As specs vivem na raiz do workspace, que é um repositório próprio:
+`docs/specs/<NNN-nome-curto>/`. `front/` e `back/` têm cada um o seu `.git` e
+não guardam spec; spec escrita dentro deles não é lida pelo verificador nem
+pelo hook de "Gatilho obrigatório".
 
 ## Procedimento
 1. Crie `docs/specs/<NNN-nome-curto>/` — três dígitos, nome curto em
@@ -29,7 +27,7 @@ não a vê.
    que funcionou.
    Critério de aceitação é numerado `CA-01`, `CA-02`… e é observável de
    fora — "funciona bem" não é critério. O Vínculo cita o item numerado do
-   `docs/PRD.md` (itens 1–5 da v1), a seção do `docs/layout.md` (5.x, 6,
+   `docs/PRD.md` (itens 1–5 da v1), a seção do `layout.md` (5.x, 6,
    7.x) e o ADR-001 que restringe a fatia.
 3. Antes de escrever a spec, liste as perguntas que o PRD e o layout não
    respondem. Elas ficam escritas na própria spec ("Fora de escopo / não
@@ -57,7 +55,7 @@ da spec da fatia.
 - Não escreva código antes do plano aprovado.
 - Não crie pasta de spec fora do padrão `NNN-nome-curto` nem numere fora da
   ordem (a próxima é a seguinte à última que existe em `docs/specs/`).
-- Não escreva a spec de uma tela sem citar a seção do `docs/layout.md` que a
+- Não escreva a spec de uma tela sem citar a seção do `layout.md` que a
   define, nem a de um comportamento sem citar o item do `docs/PRD.md`.
 - Não trate o PRD e o layout como a spec da fatia: eles são a fonte, não o
   recorte. A spec diz o que ESTA fatia faz e como sei que funcionou.
@@ -65,7 +63,48 @@ da spec da fatia.
 ## Antes de declarar uma spec pronta
 - Delegue ao subagente verificador-spec (.claude/agents/verificador-spec.md),
   passando o caminho da spec e um intervalo de commits por repositório
-  (raiz, front, back).
+  (raiz, front, back; `nenhum` quando o repositório não participa).
+- O verificador só lê e roda teste. Ele salva o resultado em
+  `docs/specs/<NNN-nome-curto>/verificacao-rodada-<N>.md`, com uma tabela
+  `CA | veredito | evidência`, o HEAD de cada repositório no momento da
+  verificação e a última linha `Veredito: PRONTA` ou `Veredito: NÃO PRONTA — <motivo>`.
 - A spec só é pronta com "Veredito: PRONTA". Qualquer outro resultado
   volta para as tarefas — quem corrige é o agente principal, nunca o
-  verificador.
+  verificador — e a próxima verificação gera a rodada seguinte (nunca se
+  sobrescreve uma rodada).
+- Commitar a própria `verificacao-rodada-<N>.md` na raiz não invalida a rodada.
+  Qualquer outro commit depois dela, em qualquer um dos três repositórios,
+  invalida: é preciso outra rodada.
+
+## Gatilho obrigatório
+Mecanismo: hook `PreToolUse` do harness, em `.claude/settings.json`, que
+executa `.claude/hooks/exige-verificacao.mjs`. Ele bloqueia (exit 2) duas
+ações:
+1. **`git push`** (em qualquer repositório) quando a spec ativa — a de maior
+   `NNN` em `docs/specs/` — não tem `verificacao-rodada-<N>.md` válido.
+2. **Marcar a spec como PRONTA**: gravar em `spec.md`, `plan.md` ou `tasks.md`
+   uma linha `Status: PRONTA` (convenção deste hook; não existia antes) pela
+   ferramenta Write/Edit/MultiEdit ou por um comando Bash que cite
+   `docs/specs/`.
+
+"Válido" = a rodada de maior `<N>` da pasta da spec existe, termina em
+`Veredito: PRONTA` e os HEADs que ela registra batem com os atuais:
+- `front` e `back`: o HEAD atual é igual ao registrado.
+- raiz: igual, ou posterior com diferença só em `verificacao-rodada-*.md` e na
+  linha `Status:` do `spec.md` (a raiz guarda a própria evidência).
+Sem nenhuma pasta de spec em `docs/specs/`, o push não é barrado.
+
+Limitações conhecidas — leia antes de confiar:
+- **O agente pode forjar o arquivo de evidência.** O hook confere o texto e os
+  HEADs, não quem escreveu o arquivo: nada impede o agente principal de criar
+  um `verificacao-rodada-<N>.md` com `Veredito: PRONTA` e os HEADs corretos sem
+  rodar o verificador. Ele também pode editar `.claude/settings.json` ou o
+  script do hook. O mecanismo detecta esquecimento, não má-fé.
+- Só vale dentro do harness: `git push` no terminal, por fora do Claude Code,
+  não passa pelo hook.
+- Trabalho não commitado não entra no HEAD; o verificador registra a árvore
+  como `limpa` ou `suja`, mas o hook não a confere.
+- O bloqueio de "marcar PRONTA" por Bash é por texto (`docs/specs/` e
+  `Status: PRONTA` no comando) e não pega comando montado de outro jeito.
+- Hoje a spec ativa é `001-login`, sem rodada: `git push` fica barrado até a
+  primeira verificação.
