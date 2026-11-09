@@ -351,3 +351,15 @@ Texto original das perguntas, com a proposta de cada uma:
 - `git status --short` nos três repositórios: só arquivos do escopo da tarefa.
 - Verificador (`rules/spec-flow.md`): a spec só vira `Status: PRONTA` com `Veredito: PRONTA`. Esta
   etapa entrega só a spec, o plano e as tarefas; **nada foi implementado**.
+
+## Estado da entrega (09/11/2026)
+Os critérios acima **não foram alterados nem relaxados**. Pendências de prova, com a razão:
+- **CA-20** (parte "recusa 409 vinda da API aparece em texto na tela"): sem print.
+- **CA-21** (Meus empréstimos com 3 empréstimos e com atraso): sem print.
+- **Razão:** em 09/11/2026 o operador decidiu não produzir mais prints, por prazo
+  (`docs/evidencias/003-indice.md`, seção "SEM PROVA"). Nada foi inventado para cobrir a falta.
+- **CA-24:** o estado final de produção cumpre o texto (professor com 0 empréstimos, 9 DISPONIVEL e 3
+  MANUTENCAO); o deslize com a conta do professor é desvio da R14 e, por decisão do operador, não
+  reprova o CA-24 (`evidencias-producao.md`).
+- O estado da spec é o da linha `Status:` do topo, que só vira `PRONTA` com `Veredito: PRONTA` na última
+  `verificacao-rodada-<N>.md`.
