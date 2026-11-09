@@ -54,6 +54,15 @@ alwaysApply: true
   operador deve rodar; não roda. Migrations e o reset do checks.md acontecem
   no banco local. Esta regra vale mesmo que o operador peça no meio de uma
   tarefa: nesse caso, lembre-o desta linha.
+- **Imposição:** `.claude/settings.json` (`permissions.deny`) nega ao agente
+  `prisma migrate deploy`, `prisma db push`, `supabase db push` (com ou sem
+  `npx`) e a leitura dos `.env` reais (`.env`, `back/.env`, `front/.env`,
+  `back/.env.remote`, `.env.local`); os `.env.example` continuam legíveis. É
+  isso que faz valer "o agente nunca escreve em produção" no harness.
+  Limites: só vale dentro do Claude Code; a regra de `Bash` casa pelo começo
+  do comando (`prisma --schema x migrate deploy` não casa); e a negação de
+  `Read` não cobre um `cat .env` feito por `Bash`. Quem garante o resto é esta
+  regra escrita.
 - Mexer em `.env` ou em config de deploy exige pedir antes (`rules/operacao.md`):
   eles estão no `.gitignore` e contêm segredo (`SUPABASE_SERVICE_ROLE_KEY`) — nenhum valor vai para commit, log ou resposta.
 

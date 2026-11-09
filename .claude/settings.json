@@ -1,4 +1,21 @@
 {
+  "permissions": {
+    "deny": [
+      "Bash(prisma migrate deploy*)",
+      "Bash(npx prisma migrate deploy*)",
+      "Bash(prisma db push*)",
+      "Bash(npx prisma db push*)",
+      "Bash(supabase db push*)",
+      "Bash(npx supabase db push*)",
+      "Read(./.env)",
+      "Read(./back/.env)",
+      "Read(./front/.env)",
+      "Read(./back/.env.remote)",
+      "Read(**/.env)",
+      "Read(**/.env.remote)",
+      "Read(**/.env.local)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
