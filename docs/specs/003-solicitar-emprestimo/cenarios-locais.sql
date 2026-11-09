@@ -5,20 +5,27 @@
 -- public.users/memberships (rode `npm run db:dados-iniciais` no banco local com SEED_TESTE_EMAIL e
 -- SEED_TESTE_PASSWORD definidos no terminal, e os 12 equipamentos da spec 002).
 --
--- Uso (psql no banco local, porta 54322):
---   psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" \
---        -v email="'conta-de-teste@exemplo.com'" -v cenario="'atraso'" \
---        -f docs/specs/003-solicitar-emprestimo/cenarios-locais.sql
+-- Uso, sem psql na maquina, pelo conteiner do Supabase local (PowerShell, na raiz do repositorio):
+--   Get-Content docs/specs/003-solicitar-emprestimo/cenarios-locais.sql -Raw |
+--     docker exec -i supabase_db_Empresitmo-TI psql -U postgres -d postgres `
+--       -v "local='sim'" -v "email='teste@local.dev'" -v "cenario='atraso'" -f -
+-- `local='sim'` e obrigatorio: e a sua confirmacao de que o destino e o conteiner LOCAL. O nome do
+-- conteiner e supabase_db_<project_id>; o project_id esta em supabase/config.toml.
 -- Cenarios: 'limpar' (volta ao estado inicial), 'limite' (3 emprestimos em dia),
 --           'atraso' (1 emprestimo com prazo vencido ha 3 dias), 'um' (1 emprestimo em dia).
 
 \set ON_ERROR_STOP on
 
--- Guarda: so roda se o banco for o local (porta 54322 e o padrao do supabase/config.toml).
-select current_setting('port') = '54322' as banco_local \gset
-\if :banco_local
+-- Guarda: sem a confirmacao `local='sim'` o script nao faz nada.
+\if :{?local}
 \else
-  \echo 'ABORTADO: este script so roda no banco local (porta 54322).'
+  \echo ABORTADO: informe -v local=SIM entre aspas simples (so para o conteiner LOCAL do Supabase).
+  \quit
+\endif
+select :local = 'sim' as confirmou_local \gset
+\if :confirmou_local
+\else
+  \echo 'ABORTADO: local deve ser sim.'
   \quit
 \endif
 
