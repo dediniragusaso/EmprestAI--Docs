@@ -1,6 +1,6 @@
 # 002 — Dados iniciais
 
-Status: EM ABERTO
+Status: PRONTA
 
 ## Objetivo
 Deixar o banco e o Storage com os dados de partida do EMPREST.AI: os 12 equipamentos do
