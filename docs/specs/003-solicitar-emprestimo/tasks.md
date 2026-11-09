@@ -5,18 +5,17 @@ tarefa de código (`rules/checks.md`): back `cd back && npm run build` (exit 0) 
 `cd front && npm run build` (`tsc --noEmit && vite build`). `lint`, `typecheck` e `test` do front, e
 `lint` do back, **não existem** (declarar em cada tarefa, não pular). Migration: nenhuma nesta fatia,
 então o `migrate reset` não se aplica. Nenhuma tarefa escreve em produção nem lê `.env`.
-
 - [x] T0 Aprovar a spec e responder Q1 a Q13, gravando as respostas na `spec.md`. Sem código.
   (bloqueia CA-01 a CA-26) — raiz. Evidência: decidido pelo operador em 09/11/2026; commit `2642daa`.
-- [ ] T1 Instalar `supertest` e `@types/supertest` no back, versões fixas, mostrando a versão antes
-  (Q6; ADR-001 §8). (base de CA-01, CA-03, CA-05 a CA-18) — back.
-- [ ] T2 `PrismaModule` e `PrismaService` globais e `DATABASE_URL` no schema Zod do boot, em
+- [x] T1 Instalar `supertest` e `@types/supertest` no back, versões fixas, mostrando a versão antes
+  (Q6; ADR-001 §8). (base de CA-01, CA-03, CA-05 a CA-18) — back. Evidência: `ce107cf` (back); `supertest` 7.3.2 e `@types/supertest` 7.2.1 fixos; lockfile com 23 pacotes novos e um existente atualizado (`qs` 6.16.1 → 6.17.1, dependência do express); build exit 0; `npm test` "Ran all test suites." (6 suítes, 30 testes).
+- [x] T2 `PrismaModule` e `PrismaService` globais e `DATABASE_URL` no schema Zod do boot, em
   `back/src/modules/prisma/` e `back/src/config/env.ts`; sem tocar em `.env`. (base de CA-05, CA-10,
-  CA-11, CA-13) — back.
-- [ ] T3 `Clock` injetável e `todayInSaoPaulo`/`addDays` sobre data civil, com `clock.spec.ts`
-  incluindo a virada da meia-noite de Brasília, em `back/src/common/clock.ts`. (CA-16) — back.
-- [ ] T4 Filtro de Problem Details passa a repassar `code`, com teste do filtro, em
-  `back/src/common/problem-details.filter.ts`. (CA-07, CA-08, CA-09, CA-10) — back.
+  CA-11, CA-13) — back. Evidência: `d68291a` (back); `env.spec.ts` novo; build exit 0; `npm test` "Ran all test suites." (7 suítes, 32 testes). Atenção: `DATABASE_URL` agora é obrigatória no boot; o projeto da Vercel do back precisa tê-la antes do próximo deploy.
+- [x] T3 `Clock` injetável e `todayInSaoPaulo`/`addDays` sobre data civil, com `clock.spec.ts`
+  incluindo a virada da meia-noite de Brasília, em `back/src/common/clock.ts`. (CA-16) — back. Evidência: `4975e61` (back); build exit 0; `npm test` "Ran all test suites." (8 suítes, 37 testes).
+- [x] T4 Filtro de Problem Details passa a repassar `code`, com teste do filtro, em
+  `back/src/common/problem-details.filter.ts`. (CA-07, CA-08, CA-09, CA-10) — back. Evidência: `b7896a3` (back); build exit 0; `npm test` "Ran all test suites." (9 suítes, 41 testes).
 - [ ] T5 `TenantGuard` (membership no tenant `suporte_ti`, 403 sem vínculo) e `TenantRequest`, com
   `tenant.guard.spec.ts` em Postgres do Testcontainers, em `back/src/modules/tenancy/`. (CA-14,
   CA-13) — back.
